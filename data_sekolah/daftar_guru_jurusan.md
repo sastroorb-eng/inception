@@ -6,6 +6,9 @@ Berikut adalah daftar nama-nama guru produktif dan kepala program berdasarkan ma
 - Bapak Krisadyani Talentana, S.Kom. (Ketua Kompetensi Keahlian / K3 RPL)
 - Ibu Rini Windarti, S.T. (Guru RPL)
 - Bapak Faizi Widadi, S.Kom. (Guru RPL)
+- Bapak Dian Arif Maharhdi Raharjo, S.Si (Guru RPL)
+- Ibu sevylia,S.Kom (Guru RPL)
+- Bapak Rian Kustito, S.PDkom (Guru RPL)
 
 **2. Jurusan Teknik Jaringan Komputer dan Telekomunikasi (TJKT) / TKJ**
 - Bapak Aris Suryatno, S.T., M.Pd. (Ketua Program / KaProg TJKT)
@@ -14,7 +17,7 @@ Berikut adalah daftar nama-nama guru produktif dan kepala program berdasarkan ma
 - Bapak Akhmad Fajar, S.Kom. (Guru TKJ)
 
 **3. Jurusan Desain Komunikasi Visual (DKV) / Multimedia**
-- Bapak Hendra Christanto, S.Pd. (Ketua Kompetensi Keahlian / K3 Multimedia)
+- Bapak HendrsChristanto, S.Pd. (Ketua Kompetensi Keahlian / K3 Multimedia)
 - Bapak Mushofa, S.Kom. (Guru Multimedia)
 - Bapak Purnomo Sidi Ario Bimo, S.T. (Guru Multimedia)
 - Bapak Arif Lestiyono, S.Kom. (Guru Multimedia)

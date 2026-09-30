@@ -35,24 +35,31 @@ def muat_semua_data_sekolah():
 kumpulan_informasi = muat_semua_data_sekolah()
 
 instruksi_sekolah = f"""
-Kamu adalah asisten virtual resmi untuk sekolah menengah ini. 
-Tugas utamamu adalah menjawab pertanyaan secara akurat, informatif, dan ramah menggunakan DATA SEKOLAH yang diberikan di bawah.
-Jika pengguna bertanya hal yang di luar konteks atau tidak ada di dalam data ini, tolak dengan sopan.
+Kamu adalah asisten virtual resmi untuk SMK Telekomunikasi Tunas Harapan. 
+Tugas utamamu adalah menjawab pertanyaan secara akurat dan ramah menggunakan DATA SEKOLAH yang diberikan di bawah.
+
+ATURAN MENJAWAB (SANGAT PENTING):
+1. JAWABLAH DENGAN SINGKAT DAN PADAT. Jangan bertele-tele, maksimal 2-3 kalimat saja.
+2. DILARANG KERAS menggunakan format tabel (menggunakan tanda |).
+3. DILARANG KERAS menggunakan tanda bintang untuk menebalkan teks (seperti **teks**). Gunakan teks polos biasa saja.
+4. Gunakan gaya bahasa santai dan ramah
+5. Jika pengguna bertanya hal di luar konteks sekolah, tolak dengan sopan.
+6. ai bisa di ajak bercanda misal berganti menjadi tsundere
 
 DATA SEKOLAH:
 {kumpulan_informasi}
-=======
-#  System Instruction
-instruksi_sekolah = """
-
-
-
+"""
 @app.route('/')
 def beranda():
     return jsonify({"pesan": "Backend Chatbot Sekolah Menyala dengan Groq!"})
 
+# --- VARIABEL MEMORI (Taruh di atas @app.route) ---
+riwayat_chat = []
+
 @app.route('/api/chat', methods=['POST'])
 def chat():
+    global riwayat_chat # Panggil memori global
+    
     data = request.json
     pesan_user = data.get("pesan")
 
@@ -60,18 +67,28 @@ def chat():
         return jsonify({"error": "Pesan tidak boleh kosong"}), 400
 
     try:
-        # 3. KODE BARU UNTUK MEMANGGIL AI GROQ
+        # 1. Simpan pesan pengguna ke memori
+        riwayat_chat.append({"role": "user", "content": pesan_user})
+
+        # 2. Batasi memori maksimal 6 baris obrolan agar token tetap awet
+        if len(riwayat_chat) > 6:
+            riwayat_chat.pop(0)
+
+        # 3. Gabungkan aturan sekolah + riwayat obrolan
+        pesan_lengkap = [{"role": "system", "content": instruksi_sekolah}] + riwayat_chat
+
+        # 4. Eksekusi menggunakan Llama 3.1 yang aktif dan super cepat
         chat_completion = client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": instruksi_sekolah},
-                {"role": "user", "content": pesan_user}
-            ],
-            model="openai/gpt-oss-20b", # Model AI yang terkenal sangat cepat dan pintar
-            temperature=0.5, # Membuat jawaban terukur dan tidak halu
+            messages=pesan_lengkap,
+            model="openai/gpt-oss-20b",
+            temperature=0.7, # Dinaikkan sedikit agar luwes saat diajak bercanda
         )
         
-        # Mengambil teks balasan dari Groq
         jawaban_ai = chat_completion.choices[0].message.content
+        
+        # 5. AI mengingat jawabannya sendiri
+        riwayat_chat.append({"role": "assistant", "content": jawaban_ai})
+
         return jsonify({"balasan": jawaban_ai})
         
     except Exception as e:
