@@ -1,13 +1,19 @@
-# Penerimaan Peserta Didik Baru (PPDB)
+# Informasi PPDB (Penerimaan Peserta Didik Baru) SMK Telekomunikasi Tunas Harapan
 
-**Jalur Pendaftaran:**
-Dapat dilakukan secara offline di Sekretariat PPDB sekolah atau secara online melalui tautan: `https://spmb.tunasharapan.info`.
+Berikut adalah rincian informasi dan biaya pendaftaran (Mengacu pada data PPDB 2022/2023):
 
-**Persyaratan Pendaftaran:**
-- Mengumpulkan Fotokopi Rapor Semester 1-5
-- Fotokopi Akta Kelahiran dan Kartu Keluarga (KK)
-- Pas Foto 3x4 sebanyak 5 lembar
-- Membayarkan biaya pendaftaran
+Rincian Biaya:
+- Sistem Penerimaan: Bebas Zonasi.
+Alamat Pendaftaran Langsung: Jalan Umbul Senjoyo I No. 3 Desa Bener, Kecamatan Tengaran, Kabupaten Semarang, Jawa Tengah. Telp: (0298-313040).
+Rincian Biaya (Early Registration):PP (Pangkal/Gedung): Rp. 3.500.000,- (dapat diangsur)   SPP: Rp. 250.000,-   Program Khusus: Ada BEA PENDIDIKAN SPESIAL melalui program Bina Lingkungan khusus calon siswa dari Kota Salatiga, Kec. Tengaran, Kec. Suruh, dan Kec. Getasan.
+Fasilitas Tambahan: Tersedia ASRAMA bagi siswa yang membutuhkan.terdapat informasi tambahan mengenai alur pendaftaran online:Formulir online bersifat sementara sebagai bukti pendaftaran awal.
+Data lengkap wajib diisi saat pendaftaran langsung di sekolah.
+Informasi waktu tes dan syarat lengkap akan dikirimkan via WhatsApp (atau SMS jika tidak memiliki WA) setelah mengisi formulir online. 
+Catatan Pembayaran:
+Uang gedung dan biaya administrasi lainnya bisa dibayarkan secara berangsur atau dicicil sesuai ketentuan sekolah.
 
-**Tahapan Seleksi:**
-Calon siswa wajib mengikuti Tes Kesehatan (cek buta warna, pendengaran, tato, tindik, riwayat penyakit keturunan, tinggi & berat badan) serta Tes Wawancara (biodata, minat bakat, dan kesanggupan mematuhi aturan sekolah) dengan didampingi orang tua/wali.
+Syarat Pendaftaran Pendaftar:
+- Mengisi formulir pendaftaran.
+- Membawa fotokopi Kartu Keluarga (KK).
+- Membawa fotokopi Akta Kelahiran.
+- Membawa Ijazah/SKL SMP sederajat.
