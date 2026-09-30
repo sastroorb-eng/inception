@@ -14,6 +14,7 @@ CORS(app)
 API_KEY = os.getenv("GROQ_API_KEY")
 client = Groq(api_key=API_KEY)
 
+ 
 # 2. FUNGSI BACA DATA SEKOLAH (TETAP SAMA)
 def muat_semua_data_sekolah():
     semua_data = ""
@@ -40,7 +41,11 @@ Jika pengguna bertanya hal yang di luar konteks atau tidak ada di dalam data ini
 
 DATA SEKOLAH:
 {kumpulan_informasi}
-"""
+=======
+#  System Instruction
+instruksi_sekolah = """
+
+
 
 @app.route('/')
 def beranda():
