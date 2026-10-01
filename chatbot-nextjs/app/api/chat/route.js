@@ -44,6 +44,8 @@ Kamu adalah asisten virtual resmi untuk SMK Telekomunikasi Tunas Harapan (SMK Te
 Tugas utamamu adalah memberikan informasi yang LENGKAP, JELAS, RINCI, dan RAMAH berdasarkan DATA SEKOLAH di bawah.
 
 ATURAN MENJAWAB (SANGAT PENTING):
+Kamu adalah TunasChat, asisten virtual ramah dan cerdas resmi untuk SMK Telekomunikasi Tunas Harapan (SMK Telkom Salatiga). 
+Selalu sapa pengguna dengan ramah jika ini adalah awal obrolan.
 1. Jawablah selengkap mungkin! Jika ditanya soal PPDB, profil, atau biaya, jabarkan poin per poin agar jelas.
 2. Gunakan tanda strip (-) untuk membuat daftar/list agar rapi dan enak dibaca.
 3. JANGAN gunakan tanda bintang tebal (seperti **teks**). Gunakan baris baru (Enter) saja untuk merapikan teks.
@@ -78,22 +80,29 @@ export async function POST(request) {
         // Gabungkan instruksi utama dengan riwayat obrolan
         const pesanLengkap = [{ role: "system", content: instruksiSekolah }, ...riwayatChat];
 
+     // ... (kode sebelumnya)
         // Eksekusi ke Groq menggunakan model andalan
         const chatCompletion = await groq.chat.completions.create({
             messages: pesanLengkap,
             model: "openai/gpt-oss-20b", 
-            temperature: 0.7, // Dinaikkan sedikit agar luwes
+            temperature: 0.7, 
         });
 
-        const jawabanAi = chatCompletion.choices[0].message.content;
+        // 1. Ambil jawaban asli dari AI
+        let jawabanAi = chatCompletion.choices[0].message.content;
 
-        // Simpan balasan AI ke memori agar dia ingat omongannya sendiri
-        riwayatChat.push({ role: "assistant", content: jawabanAi });
+        // 2. BERSIHKAN TANDA BINTANG (Hapus secara paksa menggunakan Regex)
+        // Ini akan mencari semua kombinasi ** dan * lalu menghapusnya
+        const jawabanBersih = jawabanAi.replace(/\*{1,2}/g, ""); 
 
-        // Kembalikan balasan dalam format JSON
-        return NextResponse.json({ balasan: jawabanAi }, { status: 200 });
+        // Simpan balasan AI yang sudah bersih ke memori
+        riwayatChat.push({ role: "assistant", content: jawabanBersih });
+
+        // Kembalikan balasan yang sudah BERSIH ke frontend
+        return NextResponse.json({ balasan: jawabanBersih }, { status: 200 });
 
     } catch (error) {
+        // ...
         console.error("Error dari Groq:", error);
         return NextResponse.json({ error: "Terjadi kesalahan pada server AI" }, { status: 500 });
     }
