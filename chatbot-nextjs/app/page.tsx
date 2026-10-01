@@ -33,7 +33,8 @@ export default function Home() {
     "Berapa biaya masuk PPDB?",
     "Apa saja jurusan yang ada?",
     "Bagaimana syarat daftarnya?",
-    "Dimana alamat sekolahnya?"
+    "Dimana alamat sekolahnya?",
+    "Apa aturan yang ada di sana"
   ];
 
   // Modifikasi fungsi kirim agar bisa menerima teks langsung dari tombol
