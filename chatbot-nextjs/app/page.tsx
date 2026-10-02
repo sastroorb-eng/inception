@@ -9,41 +9,63 @@ type Pesan = {
 
 export default function Home() {
   const [input, setInput] = useState("");
-  
-  // 1. PERSONA AWAL: Mengganti nama menjadi TunasBot
-  const pesanAwal: Pesan = { 
-    role: "assistant", 
-    content: "Halo Kak! 👋 Aku TunasBot, asisten virtual SMK Telekomunikasi Tunas Harapan. Ada yang ingin ditanyakan seputar sekolah, jurusan, atau PPDB?" 
-  };
-  
-  const [chat, setChat] = useState<Pesan[]>([pesanAwal]);
+  const [chat, setChat] = useState<Pesan[]>([]);
   const [loading, setLoading] = useState(false);
+  
+  // State untuk Next.js Hydration agar tidak error saat membaca waktu & LocalStorage
+  const [isMounted, setIsMounted] = useState(false); 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [chat]);
+  // FITUR 4: Sapaan Otomatis berdasarkan Jam (WIB)
+  const getWaktuSalam = () => {
+    const jam = new Date().getHours();
+    if (jam < 11) return "Selamat Pagi 🌞";
+    if (jam < 15) return "Selamat Siang ☀️";
+    if (jam < 18) return "Selamat Sore 🌇";
+    return "Selamat Malam 🌙";
+  };
 
-  // 2. QUICK PROMPTS (Daftar Pertanyaan Cepat)
+  const pesanAwal: Pesan = { 
+    role: "assistant", 
+    content: `${getWaktuSalam()} Kak! 👋 Aku TunasChat, asisten virtual SMK Telekomunikasi Tunas Harapan. Ada yang ingin ditanyakan seputar sekolah, jurusan, atau PPDB?` 
+  };
+
+  // FITUR 2: Mengambil Memori dari Local Storage saat pertama kali dibuka
+  useEffect(() => {
+    setIsMounted(true);
+    const simpananChat = localStorage.getItem("chat_tunasChat");
+    if (simpananChat) {
+      setChat(JSON.parse(simpananChat)); // Jika ada riwayat, panggil lagi
+    } else {
+      setChat([pesanAwal]); // Jika baru pertama buka, beri sapaan
+    }
+  }, []);
+
+  // Menyimpan setiap kali ada pesan baru ke Local Storage & Scroll ke bawah
+  useEffect(() => {
+    if (isMounted) {
+      localStorage.setItem("chat_tunasChat", JSON.stringify(chat));
+    }
+    scrollToBottom();
+  }, [chat, isMounted]);
+
   const pertanyaanCepat = [
     "Berapa biaya masuk PPDB?",
     "Apa saja jurusan yang ada?",
     "Bagaimana syarat daftarnya?",
-    "Dimana alamat sekolahnya?",
-    "Apa aturan yang ada di sana"
+    "Dimana alamat sekolahnya?"
   ];
 
-  // Modifikasi fungsi kirim agar bisa menerima teks langsung dari tombol
   const kirimPesan = async (teksPesan: string = input) => {
     if (!teksPesan.trim() || loading) return;
 
     const pesanUser: Pesan = { role: "user", content: teksPesan };
     setChat((prev) => [...prev, pesanUser]);
-    setInput(""); // Kosongkan input bar
+    setInput(""); 
     setLoading(true);
 
     try {
@@ -76,27 +98,57 @@ export default function Home() {
     }
   };
 
-  // 3. FUNGSI HAPUS OBROLAN
   const hapusObrolan = () => {
-    if(confirm("Yakin ingin mereset obrolan dengan TunasBot?")) {
+    if(confirm("Yakin ingin mereset obrolan dengan TunasChat?")) {
       setChat([pesanAwal]);
+      localStorage.removeItem("chat_tunasChat"); // Hapus juga dari memori browser
     }
   };
 
+  // FITUR 3: Ekspor Obrolan menjadi file TXT
+  const unduhObrolan = () => {
+    const teks = chat.map(c => `${c.role === "user" ? "Kamu" : "TunasChat"}:\n${c.content}\n`).join("\n- - - - - - - - - - - - - - - -\n\n");
+    const blob = new Blob([teks], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "Riwayat_Chat_TunasChat.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // Cegah error tampilan sebelum script berjalan sempurna
+  if (!isMounted) return null;
+
   return (
     <main className="flex flex-col h-screen bg-[#f5f7fb] font-sans">
-      {/* HEADER: Ditambah tombol Hapus Obrolan */}
+      {/* HEADER */}
       <header className="bg-white shadow-sm p-4 flex justify-between items-center border-b">
         <div>
           <h1 className="font-bold text-lg text-slate-800">TunasChat 🤖</h1>
           <p className="text-xs text-slate-500">Asisten SMK Telkom Salatiga</p>
         </div>
-        <button 
-          onClick={hapusObrolan}
-          className="text-xs md:text-sm bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-lg font-medium transition flex items-center gap-1"
-        >
-          🗑️ Reset
-        </button>
+        
+        {/* Tombol Aksi di Kanan Atas */}
+        <div className="flex gap-2">
+          {/* Tombol Download Riwayat */}
+          <button 
+            onClick={unduhObrolan}
+            className="text-xs md:text-sm bg-green-50 hover:bg-green-100 text-green-600 px-3 py-2 rounded-lg font-medium transition flex items-center gap-1"
+            title="Download Riwayat Obrolan"
+          >
+            📥 Simpan
+          </button>
+          
+          {/* Tombol Hapus/Reset */}
+          <button 
+            onClick={hapusObrolan}
+            className="text-xs md:text-sm bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-lg font-medium transition flex items-center gap-1"
+            title="Mulai Ulang"
+          >
+            🗑️ Reset
+          </button>
+        </div>
       </header>
 
       {/* CHAT AREA */}
@@ -121,7 +173,7 @@ export default function Home() {
         <div ref={chatEndRef} />
       </div>
 
-      {/* AREA QUICK PROMPTS (Tombol Pertanyaan Cepat) */}
+      {/* QUICK PROMPTS */}
       <div className="bg-white px-4 pt-3 pb-2 flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide border-t">
         {pertanyaanCepat.map((tanya, index) => (
           <button
