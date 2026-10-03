@@ -29,12 +29,12 @@ export default function Home() {
 
   const pesanAwal: Pesan = { 
     role: "assistant", 
-    content: `${getWaktuSalam()} Kak! 👋 Aku TunasBot, asisten virtual SMK Telekomunikasi Tunas Harapan. Ada yang ingin ditanyakan seputar sekolah, jurusan, atau PPDB?` 
+    content: `${getWaktuSalam()} Kak! 👋 Aku TunasChat, asisten virtual SMK Telekomunikasi Tunas Harapan. Ada yang ingin ditanyakan seputar sekolah, jurusan, atau PPDB?` 
   };
 
   useEffect(() => {
     setIsMounted(true);
-    const simpananChat = localStorage.getItem("chat_tunasbot");
+    const simpananChat = localStorage.getItem("chat_tunasChat");
     if (simpananChat) {
       setChat(JSON.parse(simpananChat));
     } else {
@@ -44,7 +44,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isMounted) {
-      localStorage.setItem("chat_tunasbot", JSON.stringify(chat));
+      localStorage.setItem("chat_tunasChat", JSON.stringify(chat));
     }
     scrollToBottom();
   }, [chat, isMounted]);
@@ -119,20 +119,20 @@ export default function Home() {
   };
 
   const hapusObrolan = () => {
-    if(confirm("Yakin ingin mereset obrolan dengan TunasBot?")) {
+    if(confirm("Yakin ingin mereset obrolan dengan TunasChat?")) {
       setChat([pesanAwal]);
-      localStorage.removeItem("chat_tunasbot");
+      localStorage.removeItem("chat_tunasChat");
       hentikanSuara(); // Matikan suara jika sedang ngomong
     }
   };
 
   const unduhObrolan = () => {
-    const teks = chat.map(c => `${c.role === "user" ? "Kamu" : "TunasBot"}:\n${c.content}\n`).join("\n- - - - - - - - - - - - - - - -\n\n");
+    const teks = chat.map(c => `${c.role === "user" ? "Kamu" : "TunasChat"}:\n${c.content}\n`).join("\n- - - - - - - - - - - - - - - -\n\n");
     const blob = new Blob([teks], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "Riwayat_Chat_TunasBot.txt";
+    a.download = "Riwayat_Chat_TunasChat.txt";
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -143,7 +143,7 @@ export default function Home() {
     <main className="flex flex-col h-screen bg-[#f5f7fb] font-sans">
       <header className="bg-white shadow-sm p-4 flex justify-between items-center border-b">
         <div>
-          <h1 className="font-bold text-lg text-slate-800">TunasBot 🤖</h1>
+          <h1 className="font-bold text-lg text-slate-800">TunasChat 🤖</h1>
           <p className="text-xs text-slate-500">Asisten SMK Telkom Salatiga</p>
         </div>
         
@@ -201,7 +201,7 @@ export default function Home() {
         {loading && (
           <div className="flex justify-start">
             <div className="bg-white px-4 py-2 rounded-2xl rounded-bl-none shadow-sm border text-sm text-slate-400">
-              TunasBot sedang mengetik...
+              TunasChat sedang mengetik...
             </div>
           </div>
         )}
@@ -224,7 +224,7 @@ export default function Home() {
       <div className="bg-white p-4 border-t flex gap-2">
         <input
           className="flex-1 border border-slate-300 rounded-full px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
-          placeholder="Tanya TunasBot di sini..."
+          placeholder="Tanya TunasChat di sini..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
