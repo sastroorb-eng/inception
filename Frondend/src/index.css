@@ -1,0 +1,889 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #e9f0f9;
+  --color-brand-100: #d7e3f2;
+  --color-brand-200: #b9cde6;
+  --color-brand-300: #8db1d4;
+  --color-brand-400: #5d8bbd;
+  --color-brand-500: #3e6f9f;
+  --color-brand-600: #2f4b7c;
+  --color-brand-700: #263f68;
+  --color-brand-800: #1f3558;
+  --color-brand-900: #1c2f4d;
+  --color-brand-950: #16273e;
+
+  --color-accent-300: #f1dfb0;
+  --color-accent-400: #e2b965;
+  --color-accent-500: #d9a94e;
+  --color-accent-600: #b3873a;
+
+  --color-teal-500: #25928a;
+  --color-teal-600: #1a6f69;
+
+  --color-paper: #f4f1ea;
+  --color-paper-deep: #ece8de;
+  --color-card: #fbf9f4;
+  --color-line: #ded7c9;
+  --color-ink: #1e293b;
+  --color-ink-soft: #566173;
+
+  --font-sans: "Plus Jakarta Sans", "Inter", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-float-slow: float 10s ease-in-out infinite;
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-shimmer: shimmer 2.8s linear infinite;
+}
+
+/* Semantic surfaces as plain CSS variables so dark mode can flip them wholesale. */
+:root {
+  --bg: #f4f1ea;
+  --band-blue-bg: #e7eff9;
+  --band-gold-bg: #f3e9d2;
+  --band-cream-bg: #efe9db;
+  --header-text: #ffffff;
+  --nav-edge: #c9c2b2;
+  --shadow-ambient: rgba(30, 41, 59, 0.1);
+  --shadow-key: rgba(30, 41, 59, 0.16);
+}
+/* Night palette. A deliberate elevation ladder — page < band < card < tile < chip —
+   with hue-separated bands (blue / gold / neutral) so sections stay apart. */
+html.dark {
+  --bg: #0e1723;
+  --band-blue-bg: #13293f;
+  --band-gold-bg: #2a2314;
+  --band-cream-bg: #22252e;
+  --header-text: #eef3fa;
+  --nav-edge: #060b12;
+  --shadow-ambient: rgba(0, 0, 0, 0.35);
+  --shadow-key: rgba(0, 0, 0, 0.5);
+  --color-paper: #16222f;
+  --color-paper-deep: #0b1420;
+  --color-card: #1b2a3f;
+  --color-line: #3a5271;
+  --color-ink: #e9eff7;
+  --color-ink-soft: #a9b8cc;
+  color-scheme: dark;
+}
+
+/* Utility overrides map the light-mode classNames onto that ladder, so no page
+   component needs to know about dark mode. */
+html.dark body { color: var(--color-ink); }
+html.dark { background-color: var(--bg); }
+html.dark .bg-white,
+html.dark .bg-\[\#faf9f5\],
+html.dark .bg-\[\#faf6ec\] { background-color: #243a55; }
+html.dark .bg-white\/70,
+html.dark .bg-white\/90 { background-color: rgba(27, 42, 63, 0.88); }
+html.dark .bg-card { background-color: var(--color-card); }
+html.dark .bg-brand-50 { background-color: #2a4260; }
+html.dark .bg-brand-100 { background-color: #2d4767; }
+html.dark .bg-brand-200 { background-color: #314f72; }
+html.dark .bg-slate-50,
+html.dark .bg-slate-100 { background-color: #243a55; }
+html.dark .bg-slate-200 { background-color: #2f4a68; }
+html.dark .bg-\[\#f2f4f5\] { background-color: #101b28; }
+html.dark .bg-amber-50 { background-color: #2e2513; }
+html.dark .bg-green-100 { background-color: #16301f; }
+html.dark .bg-red-50 { background-color: #341d21; }
+html.dark .bg-paper-deep { background-color: var(--color-paper-deep); }
+
+/* The dark end of the brand ramp is this app's ink, so it has to read light.
+   text-brand-100/200/300 are already light-on-dark labels and stay untouched. */
+html.dark .text-brand-950 { color: #f2f7fd; }
+html.dark .text-brand-900 { color: #e8f0fa; }
+html.dark .text-brand-800 { color: #d7e5f4; }
+html.dark .text-brand-700 { color: #c3d8ef; }
+html.dark .text-brand-600 { color: #a9c6e6; }
+html.dark .text-slate-800,
+html.dark .text-slate-900 { color: var(--color-ink); }
+html.dark .text-slate-700 { color: #d7e0ec; }
+html.dark .text-slate-600 { color: #c6d2e2; }
+html.dark .text-slate-500,
+html.dark .text-slate-400 { color: var(--color-ink-soft); }
+html.dark .text-amber-800 { color: #f2c98a; }
+html.dark .text-green-700 { color: #86d7a6; }
+html.dark .text-red-600 { color: #f39a9a; }
+/* Gold chips keep dark ink — light ink on #d9a94e would fail contrast instead. */
+html.dark .bg-accent-500.text-brand-950 { color: #16273e; }
+
+/* Structural borders darken; brand blues stay bright because they carry accents
+   and interaction feedback (card top rules, hover outlines). */
+html.dark .border-slate-200,
+html.dark .border-slate-300 { border-color: var(--color-line); }
+html.dark .border-brand-100,
+html.dark .border-brand-200 { border-color: #3f5c7f; }
+html.dark .border-brand-300 { border-color: #74a3d6; }
+html.dark .border-brand-600,
+html.dark .border-brand-700 { border-color: #6f9fd0; }
+html.dark .border-brand-900\/10 { border-color: rgba(233, 239, 247, 0.14); }
+html.dark .border-red-300 { border-color: #8c4a51; }
+
+/* btn-ghost paints with tokens, so it needs its own night pairing. */
+html.dark .btn-ghost { background: var(--color-card); border-color: #4d6f9a; color: #dbe7f5; }
+html.dark .btn-ghost:hover { background: #2d4767; }
+html.dark :focus-visible { outline-color: #7fb0e0; }
+
+/* Logos are dark line art on transparent backgrounds — they keep a pale plate. */
+html.dark img.bg-white { background-color: #f4f1ea; }
+html.dark .marquee-item { background-color: #f4f1ea; border-color: #f4f1ea; }
+html.dark .marquee-item span { color: #1c2f4d; }
+html.dark .program-logo { padding: 8px; border-radius: 14px; background-color: #f4f1ea; }
+
+/* Hero texture: the light-mode tints vanish on navy. */
+html.dark .grid-overlay {
+  background-image:
+    linear-gradient(rgba(233, 239, 247, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(233, 239, 247, 0.05) 1px, transparent 1px);
+}
+html.dark .aurora::before {
+  border-color: rgba(169, 198, 230, 0.22);
+  box-shadow: 0 0 0 42px rgba(169, 198, 230, 0.05), 0 0 0 84px rgba(169, 198, 230, 0.04);
+}
+html.dark .h-px.bg-brand-600 { background-color: var(--color-accent-400); }
+
+@keyframes float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-1deg); }
+  50% { transform: translate3d(0, -12px, 0) rotate(1deg); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(18px, -10px, 0); }
+}
+
+html { scroll-behavior: smooth; }
+body {
+  @apply bg-paper text-ink antialiased;
+  background:
+    radial-gradient(circle at 8% 12%, color-mix(in srgb, var(--color-brand-400) 10%, transparent), transparent 24rem),
+    radial-gradient(circle at 92% 78%, color-mix(in srgb, var(--color-accent-400) 9%, transparent), transparent 28rem),
+    linear-gradient(180deg, var(--bg) 0%, var(--color-paper-deep) 55%, var(--bg) 100%);
+  background-attachment: fixed;
+  font-family: var(--font-sans);
+  font-size: 16.5px;
+  line-height: 1.65;
+  font-variant-numeric: tabular-nums;
+}
+html.dark body { @apply text-slate-200; }
+
+h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
+.font-display { font-family: var(--font-display); }
+
+/* Utility for numbers/dates that must stay aligned (NPSN, telepon, tanggal). */
+.nums { font-variant-numeric: tabular-nums; }
+
+::selection { background: var(--color-brand-200); color: var(--color-brand-950); }
+
+/* Keyboard focus: visible, institutional, WCAG 2.2 AA (2.4.11 & 2.4.13) */
+:focus-visible {
+  outline: 3px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Component classes live in @layer components so Tailwind utilities
+   (bg-brand-950, text-white, ...) always win over them. */
+@layer components {
+  /* Skip link (WCAG 2.4.1) */
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -100%;
+    z-index: 100;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0 0 8px 8px;
+    background: var(--color-brand-950);
+    color: #fff;
+    font-weight: 600;
+    transition: top 0.15s ease;
+  }
+  .skip-link:focus { top: 0; }
+
+  /* ---------- Buttons: physical press, softened edges ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.65rem;
+    padding: 0.7rem 1.6rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.25;
+    border: 1px solid transparent;
+    cursor: pointer;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    will-change: transform;
+    transform-origin: center bottom;
+    transition:
+      transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease;
+  }
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.22) 48%, transparent 76%);
+    transform: translateX(-130%);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn:hover::before { transform: translateX(130%); }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(2px) scale(0.98); transition-duration: 0.08s; }
+  .btn:disabled { opacity: 0.6; transform: none; cursor: not-allowed; }
+
+  .btn-primary {
+    background: linear-gradient(180deg, var(--color-brand-600) 0%, var(--color-brand-800) 100%);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 14px 22px -14px var(--shadow-key);
+  }
+  .btn-primary:hover { box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 18px 26px -14px var(--shadow-key); }
+  .btn-primary:active { box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.18); }
+
+  .btn-ghost {
+    background: var(--color-card);
+    border-color: var(--color-brand-600);
+    color: var(--color-brand-700);
+    box-shadow: 0 10px 16px -12px var(--shadow-ambient);
+  }
+  .btn-ghost:hover { background: var(--color-brand-50); }
+  .btn-ghost:active { box-shadow: none; }
+
+  .btn-ink {
+    background: var(--color-brand-800);
+    color: #fff;
+    box-shadow: 0 12px 20px -12px var(--shadow-key);
+  }
+  .btn-ink:hover { box-shadow: 0 16px 24px -12px var(--shadow-key); }
+  .btn-ink:active { box-shadow: none; }
+
+  .btn-sm {
+    padding: 0.45rem 1.05rem;
+    font-size: 0.85rem;
+    border-radius: 0.55rem;
+  }
+
+  /* ---------- Footer link: editorial sliding underline ---------- */
+  .footer-link {
+    position: relative;
+    display: inline-block;
+    color: rgba(215, 227, 242, 0.9);
+    transition: color 0.2s ease;
+  }
+  .footer-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .footer-link:hover { color: #fff; }
+  .footer-link:hover::after,
+  .footer-link:focus-visible::after { transform: scaleX(1); }
+
+  .perspective-1000 { perspective: 1000px; }
+  .perspective-1600 { perspective: 1600px; }
+  .preserve-3d { transform-style: preserve-3d; }
+  .backface-hidden { backface-visibility: hidden; }
+
+  /* ---------- Scroll reveal: CSS transition only (transform + opacity) ---------- */
+  .reveal {
+    transition:
+      opacity 0.4s ease 0s,
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0s;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal[data-reveal='hidden'] { opacity: 0; transform: translateY(20px); }
+  }
+  .reveal-d1 { transition-delay: 0.06s; }
+  .reveal-d2 { transition-delay: 0.12s; }
+  .reveal-d3 { transition-delay: 0.18s; }
+  .reveal-d4 { transition-delay: 0.24s; }
+  .reveal-d5 { transition-delay: 0.3s; }
+  .reveal-d6 { transition-delay: 0.36s; }
+  .reveal-d7 { transition-delay: 0.42s; }
+  .reveal-d8 { transition-delay: 0.48s; }
+
+  /* Collapse/expand (FAQ) lewat grid rows, bukan animasi tinggi JS. */
+  .collapse-grid { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+  .collapse-grid.is-open { grid-template-rows: 1fr; }
+  .collapse-grid > div { overflow: hidden; }
+
+  /* CSS-driven stepper: lebar bar progres & perpindahan panel langkah.
+     Selector .bar[data-progress] lebih spesifik agar tidak kalah oleh utility Tailwind. */
+  .bar[data-progress='1'] { width: 33.333%; }
+  .bar[data-progress='2'] { width: 66.666%; }
+  .bar[data-progress='3'] { width: 100%; }
+  .step-panel { animation: step-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  @keyframes step-in {
+    from { opacity: 0.35; transform: translateX(18px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  /* Editorial page header ---------- */
+  .page-header {
+    position: relative;
+    overflow: hidden;
+    color: var(--header-text);
+    background:
+      radial-gradient(circle at 78% 22%, rgba(93, 139, 189, 0.2), transparent 22rem),
+      linear-gradient(118deg, var(--color-brand-950) 0%, var(--color-brand-800) 70%, var(--color-brand-700) 100%);
+  }
+  .page-header__grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.28;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: linear-gradient(90deg, transparent, #000 30%, #000);
+  }
+  .page-header__object {
+    position: absolute;
+    right: clamp(1rem, 8vw, 8rem);
+    top: 50%;
+    width: 12rem;
+    height: 12rem;
+    perspective: 700px;
+    transform: translateY(-50%) rotate(-8deg);
+  }
+  .page-header__object span {
+    position: absolute;
+    inset: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 12px 14px 0 rgba(11, 19, 32, 0.24);
+    transform: rotateX(60deg) rotateZ(45deg);
+    animation: header-stack 7s ease-in-out infinite;
+  }
+  .page-header__object span:nth-child(2) {
+    inset: 2.8rem;
+    background: rgba(226, 185, 101, 0.22);
+    animation-delay: -0.9s;
+  }
+  .page-header__object span:nth-child(3) {
+    inset: 4.1rem;
+    background: rgba(255, 255, 255, 0.14);
+    animation-delay: -1.8s;
+  }
+  .page-header__rule {
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-accent-500) 0 30%, var(--color-brand-400) 30% 70%, transparent 70%);
+    opacity: 0.6;
+  }
+  @keyframes header-stack {
+    0%, 100% { transform: rotateX(60deg) rotateZ(45deg) translateZ(0); }
+    50% { transform: rotateX(60deg) rotateZ(45deg) translateZ(14px); }
+  }
+
+  .aurora {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--color-paper) 0%, var(--band-blue-bg) 60%, var(--color-paper-deep) 100%);
+  }
+  .aurora::before {
+    content: "";
+    position: absolute;
+    width: 28rem;
+    height: 28rem;
+    right: -10rem;
+    top: -12rem;
+    border-radius: 50%;
+    border: 1px solid rgba(47, 75, 124, 0.14);
+    box-shadow: 0 0 0 42px rgba(47, 75, 124, 0.04), 0 0 0 84px rgba(47, 75, 124, 0.03);
+    animation: drift 11s ease-in-out infinite;
+  }
+  .grid-overlay {
+    background-image:
+      linear-gradient(rgba(47, 75, 124, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 75, 124, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent 85%);
+  }
+
+  /* ---------- Full-bleed color bands ---------- */
+  .band-blue {
+    background: var(--band-blue-bg);
+    border-block: 1px solid color-mix(in srgb, var(--color-brand-400) 26%, transparent);
+  }
+  /* Halaman non-Beranda: warna biru memenuhi lebar layar sampai ke sisi
+     kiri-kanan, tidak hanya di kolom konten tengah. */
+  .page-shell {
+    background:
+      radial-gradient(circle at 2% 12%, color-mix(in srgb, var(--color-brand-300) 22%, transparent), transparent 26rem),
+      radial-gradient(circle at 98% 84%, color-mix(in srgb, var(--color-brand-300) 22%, transparent), transparent 26rem),
+      linear-gradient(180deg, var(--band-blue-bg) 0%, color-mix(in srgb, var(--band-blue-bg) 78%, var(--color-brand-200)) 100%);
+  }
+  html.dark .page-shell { background: var(--band-blue-bg); }
+  .band-gold {
+    background: var(--band-gold-bg);
+    border-block: 1px solid color-mix(in srgb, var(--color-accent-500) 32%, transparent);
+  }
+  .band-cream {
+    background: var(--band-cream-bg);
+    border-block: 1px solid color-mix(in srgb, var(--color-accent-600) 22%, transparent);
+  }
+
+  /* ---------- Cards: 3D feel kept, hard offsets replaced by layered soft shadows ---------- */
+  .tilt-card {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease;
+    will-change: transform;
+  }
+  .tilt-card:hover { transform: translateY(-6px); box-shadow: 0 24px 40px -26px var(--shadow-key); }
+  .tilt-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: var(--glare-opacity, 0);
+    background: radial-gradient(240px circle at var(--glare-x, 50%) var(--glare-y, 50%), rgba(255, 255, 255, 0.5), transparent 62%);
+    mix-blend-mode: soft-light;
+    transition: opacity 0.25s ease;
+  }
+  .tilt-inner { transform: translateZ(30px); }
+
+  .depth-card {
+    position: relative;
+    transform-style: preserve-3d;
+    background: var(--color-card);
+    border: 1px solid var(--color-line);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 1px 2px var(--shadow-ambient),
+      0 10px 24px -16px var(--shadow-key);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  html.dark .depth-card { box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 26px -16px rgba(0, 0, 0, 0.5); }
+  .depth-card:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 2px 3px var(--shadow-ambient),
+      0 18px 34px -18px var(--shadow-key);
+  }
+
+  /* Hero "tata surya": logo sekolah sebagai pusat, 4 program keahlian mengorbit
+     sebagai planet. Cincin berputar; label planet counter-rotate agar tetap tegak.
+     Pusatnya dibuat 3D: satu cincin miring + satu cincin datar mengelilingi logo,
+     logo melayang pelan. */
+  .solar-scene { --solar-sun: 150px; --solar-planet: 62px; min-height: 410px; }
+  .solar-scene__stage {
+    position: relative;
+    width: min(100%, 430px);
+    aspect-ratio: 1;
+    margin-inline: auto;
+    perspective: 900px;
+  }
+  .solar-orbit {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    border: 2px dashed var(--color-brand-400);
+    border-radius: 50%;
+    animation: solar-spin 26s linear infinite;
+  }
+  .solar-orbit--outer { width: 100%; height: 100%; }
+  .solar-orbit--inner { width: 62%; height: 62%; animation-duration: 19s; animation-direction: reverse; }
+  .solar-planet {
+    position: absolute;
+    left: calc(50% - var(--solar-planet) / 2);
+    width: var(--solar-planet);
+    height: var(--solar-planet);
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: var(--color-card);
+    color: var(--color-brand-900);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    box-shadow: 4px 6px 0 rgba(47, 75, 124, 0.14), 0 14px 24px -18px var(--shadow-key);
+    animation: solar-spin 26s linear infinite reverse;
+  }
+  .solar-orbit--inner .solar-planet { animation-duration: 19s; animation-direction: normal; }
+  .solar-planet--start { top: calc(var(--solar-planet) / -2); }
+  .solar-planet--end { bottom: calc(var(--solar-planet) / -2); }
+  html.dark .solar-planet { color: var(--color-brand-200); background: #1a2434; }
+  .solar-sun {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: var(--solar-sun);
+    height: var(--solar-sun);
+    display: grid;
+    place-items: center;
+    transform-style: preserve-3d;
+  }
+  .solar-sun img {
+    position: relative;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 20px var(--shadow-key));
+    animation: solar-float 9s ease-in-out infinite;
+  }
+  /* Dua cincin pada logo. Aturan anti-tabrakan: sebuah elips (cincin miring) dan
+     sebuah lingkaran (cincin datar) hanya bisa bersarang tanpa berpotongan kalau
+     radius lingkaran >= radius maksimum elips. Karena itu cincin datar (::after)
+     dibuat lebih besar dari cincin miring (::before), dan keduanya tetap di dalam
+     tepi dalam jalur planet orbit dalam. */
+  .solar-sun::before {
+    content: "";
+    position: absolute;
+    inset: -5%;
+    border: 2px solid var(--color-brand-400);
+    border-radius: 50%;
+    transform: translateZ(-26px) rotateX(70deg) rotateZ(0deg);
+    animation: solar-ring-a 11s linear infinite;
+  }
+  .solar-sun::after {
+    content: "";
+    position: absolute;
+    inset: -11%;
+    border: 2px dashed var(--color-brand-300);
+    border-radius: 50%;
+    animation: solar-spin 14s linear infinite;
+  }
+  /* Titik orbit: penanda rotasi cincin. Pembungkusnya memakai geometri
+     & sumbu transform yang sama dengan .solar-sun::before agar menempel di cincin. */
+  .solar-ring-dot {
+    position: absolute;
+    z-index: 2;
+    inset: -5%;
+    transform: translateZ(-26px) rotateX(70deg) rotateZ(0deg);
+    animation: solar-ring-a 11s linear infinite;
+  }
+  .solar-ring-dot::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: calc(50% - 5px);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-brand-600);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.75);
+  }
+  html.dark .solar-ring-dot::after {
+    background: var(--color-brand-300);
+    box-shadow: 0 0 0 3px rgba(16, 24, 39, 0.75);
+  }
+  html.dark .solar-sun::before { border-color: var(--color-brand-500); }
+  html.dark .solar-sun::after { border-color: var(--color-brand-600); }
+  @media (max-width: 639px) {
+    .solar-scene { --solar-sun: 120px; --solar-planet: 52px; }
+    .solar-sun img { width: 120px; height: 120px; }
+    .solar-sun::before { inset: -6%; }
+    .solar-sun::after { inset: -16%; }
+    .solar-ring-dot { inset: -6%; }
+    .solar-planet { font-size: 10px; }
+  }
+  @keyframes solar-spin { to { transform: rotate(360deg); } }
+  @keyframes solar-ring-a {
+    from { transform: translateZ(-26px) rotateX(70deg) rotateZ(0deg); }
+    to { transform: translateZ(-26px) rotateX(70deg) rotateZ(360deg); }
+  }
+  @keyframes solar-float {
+    0%, 100% { transform: translate3d(-10px, -10px, 0) rotateX(7deg) rotateY(-7deg) rotateZ(-2.5deg) scale(1); }
+    50% { transform: translate3d(10px, 12px, 0) rotateX(-7deg) rotateY(7deg) rotateZ(2.5deg) scale(1.025); }
+  }
+
+  .isometric-mark {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    transform-style: preserve-3d;
+    transform: rotateX(58deg) rotateZ(45deg);
+  }
+  .isometric-mark span {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(47, 75, 124, 0.28);
+    background: color-mix(in srgb, var(--color-brand-300) 40%, var(--color-card));
+    box-shadow: 7px 7px 0 rgba(47, 75, 124, 0.15);
+  }
+  .isometric-mark span:nth-child(2) { transform: translateZ(14px); background: var(--color-card); }
+  .isometric-mark span:nth-child(3) { transform: translateZ(28px); background: var(--color-brand-100); }
+
+  /* Lambang program keahlian pada kartu Beranda. Berkas asli kiriman tim
+     (public/images/jurusan/), dibingkai seukuran badge lama agar kartu tidak geser. */
+  .program-logo {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+  }
+  .program-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .slot-empty {
+    background: linear-gradient(110deg, var(--color-paper-deep) 30%, var(--color-card) 50%, var(--color-paper-deep) 70%);
+    background-size: 200% 100%;
+    animation: shimmer 2.8s linear infinite;
+  }
+  .marquee-track { display: flex; width: max-content; animation: marquee 32s linear infinite; }
+  .marquee-track:hover { animation-play-state: paused; }
+  /* Marquee mitra: daftar yang sama diulang dua kali lalu track digeser -50%,
+     jadi loop-nya mulus tanpa loncat. Jarak antar kartu memakai margin pada item,
+     BUKAN gap — dengan gap, setengah lebar track tidak sama dengan satu salinan. */
+  .marquee-mask {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee-item {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    height: 76px;
+    margin-inline: 12px;
+    padding-inline: 20px;
+    border: 1px solid var(--color-line);
+    border-radius: 14px;
+    background: var(--color-card);
+  }
+  .marquee-item img { width: auto; max-height: 46px; object-fit: contain; }
+  .marquee-item span {
+    max-width: 210px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--color-brand-800);
+  }
+  /* Penghubung bagan struktur organisasi: trunk dari tier induk (org-row::before),
+     bus horizontal + drop per kartu (org-cell::after / ::before). Gap vertikal antar
+     tier = space-y-9 (2.25rem), gap horizontal = gap-5 (1.25rem). */
+  .org-row { position: relative; }
+  .org-row::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -2.25rem;
+    height: 1.125rem;
+    width: 2px;
+    background: var(--color-brand-300);
+  }
+  .org-cell { position: relative; }
+  .org-cell::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -1.125rem;
+    height: 1.125rem;
+    width: 2px;
+    background: var(--color-brand-300);
+  }
+  .org-cell::after {
+    content: "";
+    position: absolute;
+    top: -1.125rem;
+    left: -0.625rem;
+    right: -0.625rem;
+    height: 2px;
+    background: var(--color-brand-300);
+  }
+  .org-cell:first-child::after { left: 50%; }
+  .org-cell:last-child::after { right: 50%; }
+  .org-cell:only-child::before,
+  .org-cell:only-child::after { display: none; }
+  /* Baris tier satu kartu: trunk lurus sampai puncak kartu. */
+  .org-row--1::before { height: 2.25rem; }
+  /* Kepala panah garis komando (mengarah ke bawah) di puncak tiap kartu, ala bagan resmi. */
+  .org-head {
+    position: absolute;
+    left: 50%;
+    top: -0.45rem;
+    width: 0;
+    height: 0;
+    transform: translateX(-50%);
+    border-inline: 0.3rem solid transparent;
+    border-top: 0.45rem solid var(--color-brand-300);
+  }
+  /* Bus koordinasi putus-putus di bawah baris Staff (9 kolom) & Guru (5 kolom).
+     Inset = setengah lebar kolom (rumus (100% - total gap) / 2 / jumlah kolom)
+     agar ujung garis tepat di tengah kartu terluar. Hanya valid di lg ke atas. */
+  .org-row--below9::after,
+  .org-row--below5::after {
+    content: "";
+    position: absolute;
+    top: calc(100% + 0.45rem);
+    border-top: 2px dashed var(--color-brand-400);
+  }
+  .org-row--below9::after { left: calc((100% - 10rem) / 18); right: calc((100% - 10rem) / 18); }
+  .org-row--below5::after { left: calc((100% - 5rem) / 10); right: calc((100% - 5rem) / 10); }
+  /* Kepala panah naik di kedua ujung bus putus-putus bawah Staff & Guru. */
+  .org-foot-head {
+    position: absolute;
+    top: 100%;
+    width: 0;
+    height: 0;
+    border-inline: 0.3rem solid transparent;
+    border-bottom: 0.45rem solid var(--color-brand-400);
+  }
+  .org-row--below9 .org-foot-head--left { left: calc((100% - 10rem) / 18); transform: translateX(-50%); }
+  .org-row--below9 .org-foot-head--right { right: calc((100% - 10rem) / 18); transform: translateX(50%); }
+  .org-row--below5 .org-foot-head--left { left: calc((100% - 5rem) / 10); transform: translateX(-50%); }
+  .org-row--below5 .org-foot-head--right { right: calc((100% - 5rem) / 10); transform: translateX(50%); }
+  /* Siku koordinasi dashed ala bagan resmi: Komite naik ke Kepala SMK,
+     Wali Kelas naik ke ujung kanan bus Guru. Hanya valid di layout lg. */
+  .org-elbow-h {
+    position: absolute;
+    top: -1.125rem;
+    border-top: 2px dashed var(--color-brand-400);
+  }
+  .org-elbow-v {
+    position: absolute;
+    top: -2.25rem;
+    height: 1.125rem;
+    border-left: 2px dashed var(--color-brand-400);
+  }
+  .org-elbow-komite-h { left: calc((100% - 2.5rem) / 3 + 1.25rem); right: calc(50% + .65rem); }
+  .org-elbow-komite-v { left: calc(50% - .75rem); }
+  .org-elbow-head {
+    position: absolute;
+    top: -2.25rem;
+    left: calc(50% - .75rem);
+    width: 0;
+    height: 0;
+    transform: translateX(-50%);
+    border-inline: 0.3rem solid transparent;
+    border-bottom: 0.45rem solid var(--color-brand-400);
+  }
+  /* Kartu Wali Kelas = max-w-xs (20rem) terpusat; ujung kanan bus Guru = tengah + 22.9rem. */
+  .org-elbow-wali-h { left: calc(50% + 10rem); width: 12.9rem; }
+  .org-elbow-wali-v { left: calc(50% + 22.9rem); }
+  /* Panah horizontal antar kartu ala bagan resmi: solid = perintah
+     (Yayasan→Kepsek, Ka.TU→Bendahara), putus-putus = koordinasi
+     (Kepsek↔Partner, Komite, Waka↔Waka, K3↔K3). Lebar = gap grid (1.25rem). */
+  .org-link {
+    position: absolute;
+    top: 50%;
+    width: 1.25rem;
+    height: 0;
+    border-top: 2px solid var(--color-brand-500);
+  }
+  .org-link--left { left: -1.25rem; }
+  .org-link--right { right: -1.25rem; }
+  .org-link--dash { border-top-style: dashed; }
+  .org-link--head-r::after,
+  .org-link--head-l::before {
+    content: "";
+    position: absolute;
+    top: -0.25rem;
+    border-block: 0.25rem solid transparent;
+  }
+  .org-link--head-r::after { right: -2px; border-left: 0.4rem solid var(--color-brand-500); }
+  .org-link--head-l::before { left: -2px; border-right: 0.4rem solid var(--color-brand-500); }
+  /* Tier Komite/Ka.TU/Bendahara: trunk jatuh ke kartu tengah; kartu samping cukup dipanah. */
+  .org-cell--nodrop::before { display: none; }
+  .org-row--nobus > .org-cell::after { display: none; }
+  /* 4-kartu baru satu baris di lg; di bawahnya grid jadi 2x2 — sambungkan trunk saja.
+     Baris 5 & 9 unit juga wrap (jadi 3 kolom) di bawah lg — trunk penuh, tanpa bus/drop. */
+  @media (max-width: 1023px) {
+    .org-row--4::before,
+    .org-row--5::before,
+    .org-row--9::before { height: 2.25rem; }
+    .org-row--4 > .org-cell::before,
+    .org-row--4 > .org-cell::after,
+    .org-row--5 > .org-cell::before,
+    .org-row--5 > .org-cell::after,
+    .org-row--9 > .org-cell::before,
+    .org-row--9 > .org-cell::after { display: none; }
+    .org-row--4 .org-head,
+    .org-row--5 .org-head,
+    .org-row--9 .org-head,
+    .org-row--below5::after,
+    .org-row--below9::after,
+    .org-foot-head,
+    .org-elbow-h,
+    .org-elbow-v,
+    .org-elbow-head { display: none; }
+    /* Sel pertama baris ke-2 layout 2x2 tidak punya tetangga kiri. */
+    .org-row--4 > .org-cell:nth-child(3) > .org-link { display: none; }
+  }
+  /* Mobile: semua tier menumpuk 1 kolom — cukup garis tulang tengah. */
+  @media (max-width: 639px) {
+    .org-row::before { height: 2.25rem; }
+    .org-cell::before,
+    .org-cell::after,
+    .org-link,
+    .org-head { display: none; }
+  }
+
+  /* Pita judul bagan — meniru banner biru bagan resmi, palet web AskTunas. */
+  .org-banner {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(120deg, var(--color-brand-900) 0%, var(--color-brand-600) 55%, var(--color-brand-800) 100%);
+    box-shadow: 0 8px 0 var(--color-brand-200);
+  }
+  .org-banner::before,
+  .org-banner::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -30%;
+    bottom: -30%;
+    width: 2.5rem;
+    transform: skewX(-24deg);
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--color-brand-300) 75%, transparent),
+      color-mix(in srgb, var(--color-brand-100) 40%, transparent));
+  }
+  .org-banner::before { left: 2.25rem; }
+  .org-banner::after { right: 2.25rem; }
+
+  /* Kunci legenda bagan. */
+  .org-key {
+    display: inline-block;
+    width: 2.25rem;
+    height: 0;
+    border-top: 2px solid var(--color-brand-700);
+  }
+  .org-key--dash { border-top-style: dashed; border-top-color: var(--color-brand-500); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

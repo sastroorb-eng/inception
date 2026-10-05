@@ -1,0 +1,16 @@
+{
+  "name": "AskTunas · SMK Telekomunikasi Tunas Harapan",
+  "short_name": "AskTunas",
+  "description": "Portal informasi resmi dan layanan informasi SMK Telekomunikasi Tunas Harapan.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#10243e",
+  "background_color": "#f7f5ef",
+  "lang": "id",
+  "icons": [
+    { "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/images/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/logo-smk.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
