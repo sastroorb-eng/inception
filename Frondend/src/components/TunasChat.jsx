@@ -78,7 +78,8 @@ export default function TunasBot() {
 
     try {
       const res = await fetch("https://inception-ebon.vercel.app/api/chat", {
-     
+    
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pesan: pesanUser.content }),
       });
