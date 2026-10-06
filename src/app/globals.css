@@ -1,0 +1,436 @@
+/* Font: taruh di baris paling atas file CSS */
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=EB+Garamond:wght@400;500;600&display=swap");
+
+body {
+  margin: 0;
+  font-family: "EB Garamond", Georgia, serif;
+}
+
+/* ===== Halaman + foto latar ===== */
+.auth-page {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 1.5rem 1rem;
+  /* cadangan bila foto belum ada */
+  background: linear-gradient(160deg, #1e5bc6 0%, #0b1a3a 100%);
+}
+
+.auth-page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* lapisan biru gelap di atas foto latar supaya kartu menonjol */
+.auth-page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(11, 26, 58, 0.5) 0%,
+    rgba(18, 58, 140, 0.55) 100%
+  );
+}
+
+/* ===== Kartu ===== */
+.auth-container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 56rem;
+  min-height: 34rem;
+  padding: 1rem;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.08),
+    0 30px 60px -20px rgba(0, 0, 0, 0.55);
+}
+
+/* ===== Panel kiri: foto dengan tepi miring ===== */
+.auth-brand {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 1.75rem 3.5rem 2rem 1.75rem;
+  overflow: hidden;
+  text-align: left;
+  color: #ffffff;
+  border-radius: 1.1rem;
+  clip-path: polygon(0 0, 100% 0, 84% 100%, 0 100%);
+  /* cadangan bila foto belum ada */
+  background: linear-gradient(160deg, #3b86e8 0%, #1e5bc6 45%, #123a8c 100%);
+}
+
+.brand-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 45% center;
+}
+
+/* lapisan gelap agar teks terbaca */
+.auth-brand::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(18, 58, 140, 0.25) 0%,
+    rgba(18, 58, 140, 0.05) 35%,
+    rgba(11, 26, 58, 0.88) 100%
+  );
+}
+
+.brand-welcome,
+.brand-name,
+.brand-desc {
+  position: relative;
+  z-index: 2;
+}
+
+/* label kecil di kiri atas */
+.brand-welcome {
+  margin: 0 0 auto;
+  padding: 0.4rem 0.9rem;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.brand-name {
+  max-width: 14rem;
+  margin: 0;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.03em;
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* garis aksen kuning dari cincin logo */
+.brand-name::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 3px;
+  margin-bottom: 0.75rem;
+  border-radius: 999px;
+  background: #f7c61b;
+}
+
+.brand-desc {
+  max-width: 14rem;
+  margin: 0;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ===== Panel kanan: form ===== */
+.auth-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem 2rem 1.5rem 1.5rem;
+}
+
+.auth-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* logo sekolah sebagai avatar bulat */
+.auth-logo {
+  display: block;
+  box-sizing: border-box;
+  width: 5rem;
+  height: 5rem;
+  margin: 0 auto 1rem;
+  padding: 0.55rem;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 1px #dbe5f7,
+    0 0 0 5px #eef4ff;
+}
+
+.auth-header h2 {
+  margin: 0;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.03em;
+  color: #0b1a3a;
+}
+
+.auth-header p {
+  margin: 0.5rem 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.05rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #0b1a3a;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 1rem;
+  font-family: inherit;
+  font-size: 1.0625rem; /* di atas 16px, mencegah zoom otomatis di iOS */
+  font-weight: 500;
+  color: #0b1a3a;
+  background-color: #ffffff;
+  border: 1.5px solid #c9d6ea;
+  border-radius: 0.65rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.form-group input::placeholder {
+  font-weight: 400;
+  color: #94a3b8;
+}
+
+.form-group input:hover,
+.form-group select:hover {
+  border-color: #8fb0e3;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #1e5bc6;
+  box-shadow: 0 0 0 4px rgba(30, 91, 198, 0.15);
+}
+
+/* autofill browser tetap putih */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #0b1a3a;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+/* panah dropdown */
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.75rem;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 7.5l5 5 5-5' fill='none' stroke='%2364748b' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.875rem center;
+  background-size: 1.25rem;
+}
+
+/* ===== Tampilkan / sembunyikan password ===== */
+.password-wrapper {
+  position: relative;
+}
+
+/* ruang di kanan agar teks tidak menimpa ikon */
+.form-group .password-wrapper input {
+  padding-right: 3rem;
+}
+
+/* sembunyikan ikon mata bawaan Edge/IE */
+.password-wrapper input::-ms-reveal,
+.password-wrapper input::-ms-clear {
+  display: none;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  color: #64748b;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  transform: translateY(-50%);
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
+}
+
+.toggle-password svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.toggle-password:hover {
+  color: #1e5bc6;
+  background-color: rgba(30, 91, 198, 0.08);
+}
+
+.toggle-password:focus-visible {
+  outline: none;
+  color: #1e5bc6;
+  box-shadow: 0 0 0 3px rgba(30, 91, 198, 0.3);
+}
+
+/* ===== Tombol ===== */
+.submit-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.9rem 1rem;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: #1e5bc6;
+  border: none;
+  border-radius: 0.65rem;
+  box-shadow: 0 6px 14px -6px rgba(30, 91, 198, 0.6);
+  transition:
+    background-color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.submit-btn:hover {
+  background-color: #1a4fb0;
+}
+
+.submit-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px #ffffff,
+    0 0 0 5px #1e5bc6;
+}
+
+.submit-btn:active {
+  background-color: #123a8c;
+  transform: scale(0.99);
+}
+
+.submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.auth-error {
+  margin: 0 0 0.75rem;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.85rem;
+  color: #991b1b;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.5rem;
+}
+
+/* ===== HP: foto jadi banner di atas ===== */
+@media (max-width: 767px) {
+  .auth-page {
+    padding: 1rem 0.75rem;
+  }
+
+  .auth-container {
+    grid-template-columns: 1fr;
+    max-width: 27rem;
+    min-height: 0;
+    padding: 0.75rem;
+  }
+
+  .auth-brand {
+    min-height: 12.5rem;
+    padding: 1.25rem 1.25rem 2.75rem;
+    clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
+  }
+
+  .brand-photo {
+    object-position: 55% center;
+  }
+
+  .brand-name {
+    max-width: none;
+    font-size: 1.15rem;
+  }
+
+  .brand-desc {
+    display: none;
+  }
+
+  .auth-panel {
+    padding: 1.25rem 0.75rem 1rem;
+  }
+
+  .auth-logo {
+    width: 4.25rem;
+    height: 4.25rem;
+  }
+
+  .auth-header h2 {
+    font-size: 1.15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}
