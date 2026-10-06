@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { school } from '../data/content'
 
 // Foto asli sekolah di balik banner judul, dipetakan dari rute supaya semua halaman
 // yang sudah memakai PageHeader ikut berubah tanpa perlu prop baru. /admin dan 404
@@ -25,10 +26,10 @@ export default function PageHeader({ title, subtitle }) {
   return (
     <header className={`page-header${photo ? ` page-header--foto page-header--${photo}` : ''}`}>
       <div className="page-header__grid" aria-hidden="true" />
-      <div className="page-header__object" aria-hidden="true">
-        <span />
-        <span />
-        <span />
+      {/* Lencana sekolah di kanan banner, murni sebagai watermark: tanpa pelat,
+          border, atau pita. */}
+      <div className="page-header__frame" aria-hidden="true">
+        <img className="page-header__logo" src={school.logo} alt="" />
       </div>
       <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-20">
         <div data-reveal={shown ? 'shown' : 'hidden'} className="reveal max-w-3xl">

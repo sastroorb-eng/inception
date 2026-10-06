@@ -376,42 +376,41 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
     background-size: 44px 44px;
     mask-image: linear-gradient(90deg, transparent, #000 30%, #000);
   }
-  .page-header__object {
+  /* Rangka selebar kolom konten (max-w-6xl) supaya lencana tidak melayang
+     sendirian ke tepi layar saat monitornya lebar. */
+  .page-header__frame {
     position: absolute;
-    right: clamp(1rem, 8vw, 8rem);
+    inset: 0;
+    margin-inline: auto;
+    max-width: 72rem;
+    pointer-events: none;
+  }
+  /* Lencana murni: pelat, border, pita emas dan lempeng kremnya dibuang semua.
+     Sisanya cuma logo sekolah yang diperkecil dan dibuat memudar, supaya terbaca
+     sebagai bayangan di atas foto — bukan papan nama yang ditempel di banner. */
+  .page-header__logo {
+    position: absolute;
+    right: 1rem;
     top: 50%;
-    width: 12rem;
-    height: 12rem;
-    perspective: 700px;
-    transform: translateY(-50%) rotate(-8deg);
+    width: 5rem;
+    opacity: 0.4;
+    filter: drop-shadow(0 12px 18px rgba(6, 11, 18, 0.6));
+    transform: translateY(-50%) rotate(-2deg);
+    animation: header-plaque 9s ease-in-out infinite;
   }
-  .page-header__object span {
-    position: absolute;
-    inset: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 12px 14px 0 rgba(11, 19, 32, 0.24);
-    transform: rotateX(60deg) rotateZ(45deg);
-    animation: header-stack 7s ease-in-out infinite;
-  }
-  .page-header__object span:nth-child(2) {
-    inset: 2.8rem;
-    background: rgba(226, 185, 101, 0.22);
-    animation-delay: -0.9s;
-  }
-  .page-header__object span:nth-child(3) {
-    inset: 4.1rem;
-    background: rgba(255, 255, 255, 0.14);
-    animation-delay: -1.8s;
+  /* Di bawah batas lg teks judul/subjudul sudah menyentuh jalur lencananya
+     (terukur tinggal 56 px jaraknya di lebar 900 px), jadi ia tidak tampil. */
+  @media (max-width: 1023px) {
+    .page-header__logo { display: none; }
   }
   .page-header__rule {
     height: 3px;
     background: linear-gradient(90deg, var(--color-accent-500) 0 30%, var(--color-brand-400) 30% 70%, transparent 70%);
     opacity: 0.6;
   }
-  @keyframes header-stack {
-    0%, 100% { transform: rotateX(60deg) rotateZ(45deg) translateZ(0); }
-    50% { transform: rotateX(60deg) rotateZ(45deg) translateZ(14px); }
+  @keyframes header-plaque {
+    0%, 100% { transform: translateY(-50%) rotate(-2deg); }
+    50% { transform: translateY(calc(-50% - 6px)) rotate(1.4deg); }
   }
 
   .aurora {
