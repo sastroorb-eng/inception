@@ -753,21 +753,19 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
     border-inline: 0.3rem solid transparent;
     border-top: 0.45rem solid var(--color-brand-300);
   }
-  /* Komite Sekolah bukan bawahan, jadi garisnya putus-putus. Dulu garis ini dipanjangkan
-     mendatar setengah lebar bagan untuk menempel ke trunk komando di tengah baris, dan
-     hasilnya satu garis panjang sejajar bus komando (membaca "Komite = bagian baris ini").
-     Sekarang tegak saja: naik penuh melewati celah antar-tier (space-y-9 = 2.25rem) ke
-     dasar kartu di kolom yang sama, tanpa bus. */
-  .org-cell--dash::before {
-    width: 0;
-    top: -2.25rem;
-    height: 2.25rem;
-    background: none;
-    border-left: 2px dashed var(--color-brand-400);
-  }
+  /* Komite Sekolah bukan bawahan Yayasan maupun Kepala SMK. Semua varian garis
+     penghubung sudah dicoba dan semuanya terbaca salah: elbow panjang ke trunk
+     ("Komite bagian baris ini"), vertikal sepanjang celah tier ("Yayasan memerintah
+     Komite"), sampai potongan pendek menggantung (sinyal tanpa arti). Satu-satunya
+     cara menunjukkan "di luar garis komando" tanpa menggambar hubungan adalah
+     menandai kotaknya, bukan garisnya: tanpa penghubung, border kartu putus-putus. */
+  .org-cell--dash::before,
   .org-cell--dash::after { display: none; }
   .org-cell--dash + .org-cell::after { left: 50%; }
-  /* Kepala panah solid di ujung garis dashed kelihatan seperti salah tempel. */
+  /* border-style saja: warna tetap dari .border-brand-500 (utilitas menang atas
+     @layer components, jadi menulis ulang border di sini tidak akan berpengaruh).
+     Turun, bukan ">": TiltCard membungkus kartunya dengan div .perspective-1000. */
+  .org-cell--dash .depth-card { border-style: dashed; }
   .org-cell--dash .org-head { display: none; }
   /* Panah horizontal antar kartu ala bagan resmi: solid = perintah
      (Yayasan→Kepsek), putus-putus = koordinasi (Kepsek↔Partner, Waka↔Waka, K3↔K3).
