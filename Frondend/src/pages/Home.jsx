@@ -95,7 +95,7 @@ export default function Home() {
         <div className="relative border-t border-brand-900/10 bg-white/70">
           <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 pt-7">
             <span className="h-px w-10 bg-brand-600" aria-hidden="true" />
-            <p className="text-xs font-bold uppercase tracking-[.2em] text-brand-700">Suasana Kampus</p>
+            <p className="text-xs font-bold uppercase tracking-[.2em] text-brand-700">Suasana Sekolah</p>
           </div>
           <div className="marquee-mask py-6">
             <div className="marquee-track">
