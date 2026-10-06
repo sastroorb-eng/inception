@@ -141,13 +141,13 @@ export default function TunasBot() {
   return (
     <div className="depth-card mx-auto flex h-[650px] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-line bg-card text-ink">
 
-      <header className="flex items-center justify-between gap-3 border-b border-brand-900/30 bg-brand-950 px-4 py-3 text-white">
+      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-brand-900/30 bg-brand-950 px-4 py-3 text-white">
         <div>
           <h2 className="font-display text-lg font-bold">TunasBot</h2>
           <p className="text-xs text-brand-100/75">Asisten Virtual {school.name}</p>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button onClick={hentikanSuara} className="btn btn-ghost btn-sm" title="Hentikan suara">
             Hentikan Suara
           </button>
