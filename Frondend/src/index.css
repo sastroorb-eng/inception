@@ -753,23 +753,19 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
     border-inline: 0.3rem solid transparent;
     border-top: 0.45rem solid var(--color-brand-300);
   }
-  /* Komite Sekolah bukan bawahan, jadi garisnya putus-putus. Drop-nya naik sampai
-     tinggi bus, lalu setengah kiri koridor ikut jadi bus — tapi bus koordinasi —
-     sampai mentok trunk komando di tengah baris. Setengah kanannya tetap bus komando.
-     right: -50% - gap = persis tengah kolom berikutnya pada grid 3 kolom sama lebar,
-     jadi titik pertemuannya dengan trunk tidak perlu angka penyesuaian. */
+  /* Komite Sekolah bukan bawahan, jadi garisnya putus-putus. Dulu garis ini dipanjangkan
+     mendatar setengah lebar bagan untuk menempel ke trunk komando di tengah baris, dan
+     hasilnya satu garis panjang sejajar bus komando (membaca "Komite = bagian baris ini").
+     Sekarang tegak saja: naik penuh melewati celah antar-tier (space-y-9 = 2.25rem) ke
+     dasar kartu di kolom yang sama, tanpa bus. */
   .org-cell--dash::before {
     width: 0;
+    top: -2.25rem;
+    height: 2.25rem;
     background: none;
     border-left: 2px dashed var(--color-brand-400);
   }
-  .org-cell--dash::after {
-    left: 50%;
-    right: calc(-50% - 1.25rem);
-    height: 0;
-    background: none;
-    border-top: 2px dashed var(--color-brand-400);
-  }
+  .org-cell--dash::after { display: none; }
   .org-cell--dash + .org-cell::after { left: 50%; }
   /* Kepala panah solid di ujung garis dashed kelihatan seperti salah tempel. */
   .org-cell--dash .org-head { display: none; }
