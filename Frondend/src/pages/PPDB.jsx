@@ -82,8 +82,10 @@ export default function PPDB() {
   const errorSummaryRef = useRef(null)
 
   // Draf hanya teks isian; berkas tidak pernah disimpan di peramban.
+  // Selain 'idle' (panel siap kirim) draf jangan ditulis ulang — kalau tidak,
+  // penghapusan di handleSubmit langsung tertimpa efek ini.
   useEffect(() => {
-    if (status === 'success') return
+    if (status !== 'idle') return
     try {
       localStorage.setItem(DRAFT_KEY, JSON.stringify(form))
     } catch {
@@ -608,14 +610,17 @@ export default function PPDB() {
                               value: berkasLabel(berkas),
                               step: 1,
                             },
-                            { label: 'Pesan', value: form.pesan || '—', step: 1 },
+                            { label: 'Pesan', value: form.pesan || '—', step: 2 },
                           ].map((row) => (
                             <div key={row.label} className="flex items-start justify-between gap-4 px-4 py-3">
                               <dt className="text-xs font-bold uppercase tracking-wider text-slate-400">{row.label}</dt>
                               <dd className="flex items-start gap-3 text-right">
                                 <span className="nums text-sm font-semibold text-brand-950">{row.value || '—'}</span>
                                 <button
-                                  type="button" onClick={() => goTo(row.step)}
+                                  type="button"
+                                  // Baris Pesan berada di langkah yang sama, jadi "Ubah" tidak bisa
+                                  // melompat mundur — arahkan fokus ke textarea-nya di bawah ringkasan.
+                                  onClick={() => (row.step === step ? fieldRefs.current.pesan?.focus() : goTo(row.step))}
                                   className="text-xs font-semibold text-brand-700 hover:underline"
                                 >
                                   Ubah
@@ -629,6 +634,7 @@ export default function PPDB() {
                         <label className={labelClass} htmlFor="pesan">Pesan (opsional)</label>
                         <textarea
                           id="pesan" name="pesan" rows="3" value={form.pesan} onChange={update}
+                          ref={registerField('pesan')}
                           className={inputClass} placeholder="Pertanyaan tambahan untuk panitia"
                         />
                       </div>
