@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎓 Inception: TunasBot - Asisten Virtual SMK Telkom Salatiga
 
-## Getting Started
+Selamat datang di repositori **Inception**! Proyek ini berisi pengembangan **TunasBot**, sebuah asisten virtual cerdas berbasis AI yang dirancang khusus untuk memberikan layanan informasi cepat, interaktif, dan akurat seputar SMK Telekomunikasi Tunas Harapan (SMK Telkom Salatiga).
 
-First, run the development server:
+## ✨ Fitur Utama
 
+- 🤖 **AI Super Cepat:** Terintegrasi dengan Groq API menggunakan model `openai/gpt-oss-20b` untuk respons obrolan yang natural dan instan.
+- 🏫 **Konteks Terkunci (Strict Prompting):** AI dikonfigurasi secara ketat untuk **hanya** menjawab pertanyaan terkait sekolah (Profil, Jurusan, PPDB, dan Fasilitas). Mampu menolak pertanyaan di luar topik dengan sopan.
+- 🔊 **Pemutar Suara (Text-to-Speech):** Dilengkapi tombol "Putar Suara" untuk membacakan respons teks dari TunasBot.
+- 🔄 **Reset Percakapan:** Tombol khusus untuk menghapus riwayat obrolan dan memulai percakapan baru.
+- 🎨 **Antarmuka Modern:** Dibangun menggunakan React (Vite) dengan gaya desain yang responsif dan elegan.
+
+## 🛠️ Teknologi yang Digunakan
+
+- **Frontend:** React.js (Vite), Tailwind CSS
+- **Backend (API Chatbot):** Next.js (App Router)
+- **AI Engine:** Groq API (`openai/gpt-oss-20b`)
+- **Deployment:** Vercel
+
+## 📂 Struktur Direktori Utama
+
+- `/Frondend` : Berisi kode sumber untuk antarmuka pengguna (UI) website utama dan komponen `TunasChat.jsx`.
+- `/chatbot-nextjs` : Berisi mesin *backend* Next.js tempat instruksi AI (*prompt engineering*) dan integrasi API Groq dijalankan.
+
+## 🚀 Cara Menjalankan Proyek Secara Lokal
+
+Pastikan kamu sudah menginstal **Node.js** dan **npm** di laptopmu. Karena proyek ini terdiri dari dua bagian (Frontend dan Backend API), kamu perlu membuka dua terminal yang berbeda.
+
+### 1. Menjalankan Backend API (TunasBot)
+Buka terminal pertama, lalu jalankan:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+cd chatbot-nextjs
+npm install
