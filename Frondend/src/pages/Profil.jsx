@@ -114,7 +114,7 @@ export default function Profil() {
                     {item.value ?? <span aria-hidden="true">—</span>}
                   </dd>
                   {item.value === null && (
-                    <p className="mt-1 text-[10px] italic text-slate-400">27 Mei 20001</p>
+                    <p className="mt-1 text-[10px] italic text-slate-400">menunggu dokumen resmi</p>
                   )}
                 </div>
               ))}
