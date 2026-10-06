@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import Seo from '../components/Seo'
-import { school, jurusan } from '../data/content'
+import { school, jurusan, ppdbResmi } from '../data/content'
 
 const initialForm = {
   nama: '',
@@ -266,6 +266,14 @@ export default function PPDB() {
                   <button type="button" onClick={kirimEmail} className="btn btn-ghost w-full">
                     Kirim via email ke {school.email}
                   </button>
+                  <a
+                    href={ppdbResmi.portal}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-ghost w-full text-center"
+                  >
+                    Lanjutkan di portal PPDB resmi sekolah
+                  </a>
                   <button type="button" onClick={resetAll} className="btn btn-ghost w-full">
                     Isi ulang formulir
                   </button>
@@ -309,6 +317,24 @@ export default function PPDB() {
                   <li>Scan ijazah / SKL atau surat keterangan lulus</li>
                   <li>Akta kelahiran (file JPG/PNG/PDF, maks {MAKS_MB} MB per berkas)</li>
                 </ul>
+              </div>
+              <div className="mt-5 border-t border-white/10 pt-5 text-sm">
+                <p className="text-xs font-bold uppercase tracking-wider text-brand-100">Alur sesuai data sekolah</p>
+                <ol className="mt-3 list-decimal space-y-2 pl-5 text-brand-100">
+                  {ppdbResmi.alur.map((langkah) => <li key={langkah}>{langkah}</li>)}
+                </ol>
+                <p className="mt-3 text-brand-100">Sistem penerimaan: {ppdbResmi.sistem}</p>
+                {ppdbResmi.catatan.map((item) => (
+                  <p key={item} className="mt-2 text-brand-100">{item}</p>
+                ))}
+                <a
+                  href={ppdbResmi.portal}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-block font-semibold text-white underline decoration-accent-400 underline-offset-4"
+                >
+                  Portal PPDB resmi sekolah ↗
+                </a>
               </div>
               <div className="mt-5 border-t border-white/10 pt-5 text-sm">
                 <p className="text-xs font-bold uppercase tracking-wider text-brand-100">Kendala pendaftaran?</p>

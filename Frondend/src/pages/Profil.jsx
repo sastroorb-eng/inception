@@ -2,7 +2,7 @@ import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import TiltCard from '../components/TiltCard'
 import Seo from '../components/Seo'
-import { strukturOrganisasi, school, visiMisi, identitas, sejarah, guru } from '../data/content'
+import { strukturOrganisasi, school, visiMisi, identitas, sejarah, guru, fasilitas, ekstrakurikuler, pkl, bkk, tataTertib } from '../data/content'
 
 function OrgNode({ jabatan, nama, unit, primary }) {
   if (unit) {
@@ -50,29 +50,27 @@ function tierRowClass(tier) {
 }
 
 // Panah lateral ala bagan resmi: solid = perintah, putus-putus = koordinasi.
-// Komite tidak dipanah horizontal — ia menyiku naik ke Kepala SMK (org-elbow-komite).
+// Hanya dipakai untuk hubungan sejajar (satu baris); hubungan antar-baris selalu
+// digambar oleh trunk + bus + drop milik baris itu sendiri.
 const lateralLink = {
   0: {
     1: 'org-link org-link--left org-link--head-r',
-    2: 'org-link org-link--left org-link--dash org-link--head-r org-link--head-l',
-  },
-  1: {
-    2: 'org-link org-link--left org-link--head-r',
+    2: 'org-link org-link--left org-link--dash',
   },
 }
 
 function cellLinkClass(tierIndex, i) {
   if (tierIndex === 2 || tierIndex === 3) {
-    return i > 0 ? 'org-link org-link--left org-link--dash org-link--head-r org-link--head-l' : ''
+    return i > 0 ? 'org-link org-link--left org-link--dash' : ''
   }
   return lateralLink[tierIndex]?.[i] ?? ''
 }
 
+// Komite Sekolah mengawasi, tidak menerima komando: garisnya putus-putus, dan
+// setengah kiri bus barisnya ikut putus-putus (lihat .org-cell--dash).
 function cellClass(tierIndex, i) {
   if (!tierIndex) return 'relative'
-  const parts = ['org-cell']
-  if (tierIndex === 1 && i !== 1) parts.push('org-cell--nodrop')
-  return parts.join(' ')
+  return tierIndex === 1 && i === 0 ? 'org-cell org-cell--dash' : 'org-cell'
 }
 
 export default function Profil() {
@@ -187,6 +185,82 @@ export default function Profil() {
           </div>
         </div>
 
+        {/* Fasilitas */}
+        <div className="mt-20">
+          <Reveal>
+            <div className="text-xs font-bold uppercase tracking-[.2em] text-brand-600">Sarana Praktik</div>
+            <h2 className="font-display mt-2 text-3xl font-bold text-brand-950">Fasilitas Unggulan</h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+              Sesuai daftar fasilitas yang dikirim sekolah; tiap butir dikutip dari naskah aslinya.
+            </p>
+          </Reveal>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {fasilitas.map((item, i) => (
+              <Reveal key={item.nama} delay={i * 0.06}>
+                <div className="depth-card h-full rounded-2xl bg-brand-100 p-7">
+                  <h3 className="font-display text-xl font-bold text-brand-950">{item.nama}</h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">{item.ket}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+
+        {/* Kesiswaan, karier, dan karakter */}
+        <div className="mt-20">
+          <Reveal>
+            <div className="text-xs font-bold uppercase tracking-[.2em] text-brand-600">Di Luar Kelas</div>
+            <h2 className="font-display mt-2 text-3xl font-bold text-brand-950">Kesiswaan, PKL, dan Penyaluran Kerja</h2>
+          </Reveal>
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            <Reveal>
+              <div className="depth-card h-full rounded-2xl bg-brand-100 p-7">
+                <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Ekstrakurikuler</p>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {ekstrakurikuler.map((item) => (
+                    <li key={item.nama} className="rounded-full bg-brand-50 px-3 py-1.5 text-xs font-semibold text-brand-800">
+                      {item.nama}
+                      {item.ket && <span className="font-normal text-slate-500"> · {item.ket}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+            <Reveal delay={0.06}>
+              <div className="depth-card h-full rounded-2xl bg-brand-100 p-7">
+                <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Praktik Kerja Lapangan</p>
+                <p className="mt-3 text-sm leading-6 text-slate-600">{pkl.info}</p>
+                <ol className="mt-4 space-y-2 text-sm leading-6 text-slate-600">
+                  {pkl.syarat.map((item) => <li key={item} className="flex gap-3"><span className="font-display font-bold text-brand-600">·</span>{item}</li>)}
+                </ol>
+                <p className="mt-4 border-t border-brand-200 pt-4 text-sm leading-6 text-slate-600">
+                  <strong className="font-semibold text-brand-950">Durasi:</strong> {pkl.durasi}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  <strong className="font-semibold text-brand-950">Lokasi:</strong> {pkl.lokasi}
+                </p>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div className="depth-card h-full rounded-2xl bg-brand-100 p-7">
+                <p className="text-xs font-bold uppercase tracking-wider text-brand-600">{bkk.nama}</p>
+                <p className="mt-3 text-sm leading-6 text-slate-600">{bkk.info}</p>
+                <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-600">
+                  {bkk.kegiatan.map((item) => <li key={item} className="border-l-2 border-brand-300 pl-4">{item}</li>)}
+                </ul>
+              </div>
+            </Reveal>
+            <Reveal delay={0.14}>
+              <div className="depth-card h-full rounded-2xl bg-brand-100 p-7">
+                <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Tata Tertib Karakter</p>
+                <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-600">
+                  {tataTertib.map((item) => <li key={item} className="flex gap-3"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-600" />{item}</li>)}
+                </ul>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+
         {/* Tenaga Pendidik */}
         <div className="mt-20">
           <Reveal>
@@ -246,53 +320,23 @@ export default function Profil() {
             </p>
           </Reveal>
           <div className="mt-12 space-y-9">
-            {strukturOrganisasi.map((tier, tierIndex) => {
-              const below = tierIndex === 4 ? ' org-row--below9' : tierIndex === 5 ? ' org-row--below5' : ''
-              return (
-                <Reveal key={tierIndex} delay={tierIndex * 0.05}>
-                  <div className={`${tierLayout(tier)} ${tierIndex ? `org-row ${tierRowClass(tier)}${tierIndex === 1 ? ' org-row--nobus' : ''}${below}` : ''}`}>
-                    {tierIndex === 1 && (
-                      <>
-                        <span className="org-elbow-h org-elbow-komite-h" aria-hidden="true" />
-                        <span className="org-elbow-v org-elbow-komite-v" aria-hidden="true" />
-                        <span className="org-elbow-head" aria-hidden="true" />
-                      </>
-                    )}
-                    {tierIndex === 6 && (
-                      <>
-                        <span className="org-elbow-h org-elbow-wali-h" aria-hidden="true" />
-                        <span className="org-elbow-v org-elbow-wali-v" aria-hidden="true" />
-                      </>
-                    )}
-                    {below && (
-                      <>
-                        <span className="org-foot-head org-foot-head--left" aria-hidden="true" />
-                        <span className="org-foot-head org-foot-head--right" aria-hidden="true" />
-                      </>
-                    )}
-                    {tier.map((node, i) => {
-                      const link = cellLinkClass(tierIndex, i)
-                      const drop = tierIndex >= 1 && !(tierIndex === 1 && i !== 1)
-                      return (
-                        <div key={node.jabatan} className={cellClass(tierIndex, i)}>
-                          {link && <span className={link} aria-hidden="true" />}
-                          {drop && <span className="org-head" aria-hidden="true" />}
-                          <OrgNode {...node} primary={tierIndex <= 1} />
-                        </div>
-                      )
-                    })}
-                  </div>
-                </Reveal>
-              )
-            })}
+            {strukturOrganisasi.map((tier, tierIndex) => (
+              <Reveal key={tierIndex} delay={tierIndex * 0.05}>
+                <div className={`${tierLayout(tier)} ${tierIndex ? `org-row ${tierRowClass(tier)}` : ''}`}>
+                  {tier.map((node, i) => {
+                    const link = cellLinkClass(tierIndex, i)
+                    return (
+                      <div key={node.jabatan} className={cellClass(tierIndex, i)}>
+                        {link && <span className={link} aria-hidden="true" />}
+                        {tierIndex >= 1 && <span className="org-head" aria-hidden="true" />}
+                        <OrgNode {...node} primary={tierIndex <= 1} />
+                      </div>
+                    )
+                  })}
+                </div>
+              </Reveal>
+            ))}
           </div>
-          <Reveal delay={0.1}>
-            <div className="mx-auto mt-10 flex max-w-xl flex-wrap items-center justify-center gap-x-8 gap-y-2 rounded-xl border border-brand-300 bg-brand-100 px-6 py-4 text-xs font-semibold text-brand-900">
-              <span className="font-bold uppercase tracking-wider">Keterangan:</span>
-              <span className="flex items-center gap-2"><span className="org-key" aria-hidden="true" /> Garis Perintah (Komando)</span>
-              <span className="flex items-center gap-2"><span className="org-key org-key--dash" aria-hidden="true" /> Garis Koordinasi</span>
-            </div>
-          </Reveal>
         </div>
       </div>
     </>

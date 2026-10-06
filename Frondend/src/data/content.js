@@ -14,6 +14,9 @@ export const school = {
   tagline: "Portal Cerdas & Asisten Virtual Sekolah",
   logo: "/images/logo-smk-transparan.png", // PNG transparan resmi kiriman tim (2026-10-03); JPG asli tetap tersimpan
   address: "Jl. Umbul Senjoyo I No. 3, Desa Bener, Kec. Tengaran, Kabupaten Semarang, Jawa Tengah 50775",
+  // Kutipan dari data sekolah (chatbot-nextjs/data_sekolah/alamat.md): menjelaskan kenapa
+  // sebagian publikasi sekolah menyebut "SMK Telkom Salatiga" padahal alamatnya Kab. Semarang.
+  lokasiCatatan: "Secara administratif berada di Kabupaten Semarang, namun letaknya berbatasan langsung dengan Kota Salatiga sehingga mudah diakses.",
   phone: "(0298) 311391",
   email: "info@tunasharapan.info",
   website: "https://www.tunasharapan.info/official/",
@@ -31,8 +34,9 @@ export const school = {
 
 // [ISI DATA ASLI] Identitas formal sekolah — supplied by Team Fiveslebew (2026-10-01),
 // sesuai Dapodik sekolah. `value: null` tampil sebagai "—" di halaman Profil.
+// Tanggal berdiri 27 Mei 2001 dikirim user (2026-10-06).
 export const identitas = [
-  { label: "Tahun Berdiri", value: null },
+  { label: "Tahun Berdiri", value: "27 Mei 2001" },
   { label: "Status Sekolah", value: "Swasta — dinaungi Yayasan Tunas Harapan Semarang" },
   { label: "Akreditasi", value: "A (Unggul)" },
   { label: "NPSN", value: "20331145" },
@@ -200,6 +204,21 @@ export const galeri = [
   { id: 17, judul: "Siswa Menggunakan Kunci Roda pada Unit Pickup", kategori: "Kegiatan", jurusan: "TKR", type: "image", src: "/images/galeri/praktik-kunci-rod.jpg" },
 ];
 
+// Marquee foto Beranda: berkas asli yang sama dengan banner judul halaman dalam
+// (public/images/situs/) dan foto galeri (public/images/galeri/). Tidak ada foto baru.
+// Alt hanya menyebut tulisan/plakat/ruangan yang terlihat di foto.
+export const fotoMarquee = [
+  { src: "/images/galeri/papan-nama-sekolah.jpg", alt: "Papan nama SMK Telekomunikasi Tunas Harapan" },
+  { src: "/images/galeri/gedung-humas.jpg", alt: "Gedung bidang humas" },
+  { src: "/images/situs/lab-komputer.jpg", alt: "Ruang laboratorium komputer dengan perangkat dan siswa" },
+  { src: "/images/galeri/gedung-pavilion.jpg", alt: "Gedung pavilion dengan panel warna-warni" },
+  { src: "/images/situs/bengkel-otomotif.jpg", alt: "Gedung dua lantai beraksen warna-warni di area kampus" },
+  { src: "/images/galeri/area-parkir-pagi.jpg", alt: "Area parkir di pagi hari" },
+  { src: "/images/situs/perpustakaan.jpg", alt: "Ruang perpustakaan dengan rak buku dan meja baca" },
+  { src: "/images/galeri/gedung-bertingkat.jpg", alt: "Gedung bertingkat di area kampus" },
+  { src: "/images/situs/papan-nama-sisi.jpg", alt: "Plakat nama sekolah dari arah samping" },
+];
+
 // [ISI DATA ASLI] Video lokal dari tim (2026-10-01). Letakkan berkas di
 // public/videos/. Galeri merender <video> untuk .mp4 dan <iframe> untuk URL embed.
 export const videos = [
@@ -255,8 +274,15 @@ export const strukturOrganisasi = [
   [{ jabatan: 'Murid', unit: true }],
 ];
 
-// [ISI DATA ASLI] Entri yang supplied tim (2026-10-01). Daftar per nama guru belum
-// diterima — untuk saat ini hanya Kepala Sekolah dan tim pengajar yang tercantum.
+// [DATA SEKOLAH] Nama guru produktif diambil dari daftar yang dipakai asisten virtual tim
+// (chatbot-nextjs/data_sekolah/daftar_guru_jurusan.md, 2026-10-05). Untuk empat ketua
+// kompetensi (K3) dipakai ejaan & gelar pada bagan resmi di atas karena sumber guru
+// menulis variants yang berbeda — belum dikonfirmasi mana yang baku:
+//   K3 PPLG: bagan "Krisdayani Talentana, S.Kom, M.Kom" vs daftar "Krisadyani Talentana, S.Kom."
+//   K3 DKV : bagan "Hendra Christanto, S.Pd"          vs daftar "HendrsChristanto, S.Pd."
+//   K3 TKR : bagan "Anjar Wahyudi, S.Pd, M.Pd"        vs daftar "Anjar Wahyudi, S.T." (guru TKR)
+//   Waka/Si: "Purnomo Sidi Aryo Bimo" (bagan) vs "Purnomo Sidi Ario Bimo" (daftar)
+// Pangkat Ibu/Bapak dari sumber dihilangkan agar seragam dengan entri lain. Foto belum ada.
 export const guru = [
   {
     id: 1,
@@ -267,28 +293,141 @@ export const guru = [
   },
   {
     id: 2,
+    nama: "Krisdayani Talentana, S.Kom, M.Kom",
+    jabatan: "K3 PPLG",
+    mengampu: "Pengembangan Perangkat Lunak & Gim",
+    foto: null,
+  },
+  { id: 3, nama: "Rini Windarti, S.T.", jabatan: "Guru PPLG", mengampu: "Pengembangan Perangkat Lunak & Gim", foto: null },
+  { id: 4, nama: "Faizi Widadi, S.Kom.", jabatan: "Guru PPLG", mengampu: "Pengembangan Perangkat Lunak & Gim", foto: null },
+  { id: 5, nama: "Dian Arif Maharhdi Raharjo, S.Si", jabatan: "Guru PPLG", mengampu: "Pengembangan Perangkat Lunak & Gim", foto: null },
+  { id: 6, nama: "Sevylia, S.Kom", jabatan: "Guru PPLG", mengampu: "Pengembangan Perangkat Lunak & Gim", foto: null },
+  { id: 7, nama: "Rian Kustito, S.PDkom", jabatan: "Guru PPLG", mengampu: "Pengembangan Perangkat Lunak & Gim", foto: null },
+  {
+    id: 8,
+    nama: "Aris Suryatno, S.T, M.Pd",
+    jabatan: "K3 TJKT",
+    mengampu: "Teknik Jaringan Komputer & Telekomunikasi",
+    foto: null,
+  },
+  { id: 9, nama: "Siti Karunia Sari, S.Kom.", jabatan: "Guru TJKT", mengampu: "Teknik Jaringan Komputer & Telekomunikasi", foto: null },
+  { id: 10, nama: "Tri Joko Mulyono, S.Kom.", jabatan: "Guru TJKT", mengampu: "Teknik Jaringan Komputer & Telekomunikasi", foto: null },
+  { id: 11, nama: "Akhmad Fajar, S.Kom.", jabatan: "Guru TJKT", mengampu: "Teknik Jaringan Komputer & Telekomunikasi", foto: null },
+  {
+    id: 12,
+    nama: "Hendra Christanto, S.Pd",
+    jabatan: "K3 DKV",
+    mengampu: "Desain Komunikasi Visual & Multimedia",
+    foto: null,
+  },
+  { id: 13, nama: "Mushofa, S.Kom.", jabatan: "Guru DKV", mengampu: "Desain Komunikasi Visual & Multimedia", foto: null },
+  { id: 14, nama: "Purnomo Sidi Aryo Bimo, S.T", jabatan: "Guru DKV", mengampu: "Desain Komunikasi Visual & Multimedia", foto: null },
+  { id: 15, nama: "Arif Lestiyono, S.Kom.", jabatan: "Guru DKV", mengampu: "Desain Komunikasi Visual & Multimedia", foto: null },
+  { id: 16, nama: "Yunika Arum Prajanti, S.I.Kom.", jabatan: "Guru DKV", mengampu: "Desain Komunikasi Visual & Multimedia", foto: null },
+  { id: 17, nama: "Ristiana Suci Wulandari, S.Ds.", jabatan: "Guru DKV", mengampu: "Desain Komunikasi Visual & Multimedia", foto: null },
+  {
+    id: 18,
+    nama: "Anjar Wahyudi, S.Pd, M.Pd",
+    jabatan: "K3 TKR",
+    mengampu: "Teknik Kendaraan Ringan",
+    foto: null,
+  },
+  { id: 19, nama: "Dimas Yogo Pratomo, S.T.", jabatan: "Guru TKR", mengampu: "Teknik Kendaraan Ringan", foto: null },
+  {
+    id: 20,
     nama: "Tim Guru Normatif & Adaptif",
     jabatan: "Team Teaching",
     mengampu: "Matematika, Bahasa Indonesia, Bahasa Inggris, Pend. Agama, PPKn, Sejarah Indonesia",
     foto: null,
   },
-  {
-    id: 3,
-    nama: "Tim Guru Produktif TJKT",
-    jabatan: "Team Teaching",
-    mengampu: "Jaringan Komputer, Administrasi Server, Teknologi WAN, Mikrotik Academy",
-    foto: null,
-  },
 ];
 
 export const visiMisi = {
-  visi: "Menjadi lembaga pendidikan vokasi unggulan yang menghasilkan lulusan kompeten, berkarakter, dan siap bersaing di era digital.",
+  // Sumber: chatbot-nextjs/data_sekolah/Profil.md. Versi lama ("Menjadi lembaga pendidikan
+  // vokasi unggulan...") tidak ditemukan di dokumen sekolah — tunggu konfirmasi bila sekolah
+  // tetap memakai naskah tersebut.
+  visi: "Terwujudnya SMK unggul, berkarakter, berdaya saing global, dan link and match dengan Dunia Usaha dan Dunia Industri (DUDI) berbasis teknologi dan kreativitas.",
   misi: [
-    "Menyelenggarakan pembelajaran berbasis industri dan teknologi terkini.",
-    "Membentuk karakter siswa yang disiplin, kreatif, dan berakhlak mulia.",
-    "Mengembangkan kerjasama mitra industri (DUDI) untuk link & match kompetensi.",
-    "Menyiapkan lulusan yang siap kerja, siap kuliah, dan siap berwirausaha.",
+    "Menyelenggarakan pembelajaran berbasis industri dan teknologi.",
+    "Menghasilkan lulusan kompeten, berkarakter Pancasila, dan siap kerja/berwirausaha.",
+    "Mengembangkan SDM pendidik dan tenaga kependidikan yang profesional.",
+    "Memperkuat kemitraan dengan DUDI, perguruan tinggi, dan masyarakat.",
+    "Mewujudkan tata kelola sekolah yang transparan, akuntabel, dan berkelanjutan.",
   ],
+};
+
+// [DATA SEKOLAH] chatbot-nextjs/data_sekolah/fasilitas.md — dijelaskan seperti bunyi
+// dokumen aslinya, tanpa menambah detail yang tidak ditulis sekolah.
+export const fasilitas = [
+  {
+    nama: "Teaching Factory (TeFa)",
+    ket: "Pembelajaran tempat siswa memproduksi barang atau jasa nyata seperti di industri sungguhan. Untuk PPLG tersedia beberapa ruangan yang menunjang pembelajaran produktif.",
+  },
+  {
+    nama: "Tempat Uji Kompetensi (TUK) Mandiri",
+    ket: "Fasilitas yang disertifikasi Lembaga Sertifikasi Profesi (LSP) Teknologi Digital untuk ujian kompetensi siswa TKJ.",
+  },
+  {
+    nama: "Aula Asrama Siswa (Lantai 1)",
+    ket: "Digunakan untuk kegiatan besar seperti seminar dan tes rekrutmen perusahaan.",
+  },
+  {
+    nama: "Masjid",
+    ket: "Fasilitas ibadah bagi siswa, siswi, guru, dan seluruh warga sekolah.",
+  },
+];
+
+// [DATA SEKOLAH] chatbot-nextjs/data_sekolah/ekstrakulikuler.md
+export const ekstrakurikuler = [
+  { nama: "Pramuka", ket: "Wajib" },
+  { nama: "Pleton Inti", ket: null },
+  { nama: "Klub Bahasa", ket: null },
+  { nama: "Band", ket: null },
+  { nama: "Bola ping-pong", ket: null },
+  { nama: "Olahraga", ket: "Sepak Bola, Basket, Bola Voli, Badminton, Pencak Silat" },
+];
+
+// [DATA SEKOLAH] chatbot-nextjs/data_sekolah/pkl.md — syarat & durasi persis seperti naskah.
+export const pkl = {
+  info: "Program wajib bagi siswa kelas XI untuk mendapatkan pengalaman langsung di dunia industri.",
+  syarat: [
+    "Menyelesaikan seluruh tugas mata pelajaran produktif pada semester sebelumnya.",
+    "Kehadiran sekolah minimal 90%.",
+    "Lulus pembekalan kedisiplinan dan budaya kerja industri.",
+  ],
+  durasi: "3 sampai 6 bulan, tergantung kesepakatan dengan industri mitra.",
+  lokasi: "Perusahaan teknologi, software house, dan instansi IT di wilayah Salatiga dan sekitarnya. Siswa boleh mengajukan tempat PKL mandiri yang relevan dengan jurusannya.",
+};
+
+// [DATA SEKOLAH] chatbot-nextjs/data_sekolah/BKK.md — contoh kegiatan disebut sekolah
+// sendiri, jadi dikutip apa adanya.
+export const bkk = {
+  nama: "Hubungan Industri (Hubin) & Bursa Kerja Khusus (BKK)",
+  info: "Unit aktif yang memperbesar kerja sama dengan dunia usaha dan dunia industri serta tingkat serapan lulusan ke lapangan kerja.",
+  kegiatan: [
+    "Tes rekrutmen calon karyawan langsung di sekolah, contohnya rekrutmen PT Fukusuke Kogyo Indonesia di aula sekolah.",
+    "Informasi lowongan kerja aktif untuk alumni, seperti Web Developer di Educa Studio, Technical Support di G-Media, dan posisi IT lainnya.",
+  ],
+};
+
+// [DATA SEKOLAH] chatbot-nextjs/data_sekolah/Aturan.md
+export const tataTertib = [
+  "Siswa dilarang memiliki tato dan tindik (bagi laki-laki), serta harus lolos tes kesehatan dasar saat pendaftaran.",
+  "Calon siswa menandatangani kesanggupan menaati seluruh tata tertib sekolah, termasuk kesiapan wali murid mendukung program kedisiplinan yang ditetapkan.",
+];
+
+// [DATA SEKOLAH] chatbot-nextjs/data_sekolah/ppdb.md. Rincian BIAYA sengaja tidak
+// dimasukkan: sumber aslinya tertulis "mengacu data PPDB 2022/2023" dan belum dikonfirmasi
+// untuk tahun ajaran berjalan.
+export const ppdbResmi = {
+  portal: "https://spmb.tunasharapan.info",
+  sistem: "Bebas zonasi — tidak dibatasi wilayah zona seperti sekolah negeri.",
+  alur: [
+    "Mengisi formulir pendaftaran; formulir online bersifat sementara sebagai bukti pendaftaran awal.",
+    "Data lengkap diisi saat pendaftaran langsung di sekolah.",
+    "Informasi waktu tes dan syarat lengkap dikirim sekolah melalui WhatsApp (atau SMS bila tidak memiliki WhatsApp) setelah formulir diisi.",
+  ],
+  catatan: ["Tersedia asrama bagi siswa yang membutuhkan."],
 };
 
 // [ISI DATA ASLI] Berita supplied oleh tim (2026-10-01). Bentuk entri Beranda:

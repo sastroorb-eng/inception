@@ -4,7 +4,7 @@ import TiltCard from '../components/TiltCard'
 import Reveal from '../components/Reveal'
 import CountUp from '../components/CountUp'
 import Seo from '../components/Seo'
-import { school, jurusan, stats, berita, visiMisi, industryNetwork } from '../data/content'
+import { school, jurusan, stats, berita, visiMisi, industryNetwork, fotoMarquee } from '../data/content'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -24,6 +24,18 @@ function MitraPlate({ mitra, salinan = false }) {
         ? <img src={mitra.logo} alt={`Logo ${mitra.name}`} loading="lazy" />
         : <span>{mitra.name}</span>}
     </div>
+  )
+}
+
+// Marquee foto kampus: sama seperti marquee mitra, daftar diulang dua kali supaya
+// loop -50% tidak loncat.
+const fotoDuplikat = [...fotoMarquee, ...fotoMarquee]
+
+function FotoPlate({ foto, salinan = false }) {
+  return (
+    <figure className="marquee-photo" aria-hidden={salinan ? 'true' : undefined}>
+      <img src={foto.src} alt={foto.alt} loading="lazy" />
+    </figure>
   )
 }
 
@@ -75,6 +87,23 @@ export default function Home() {
             <p className="font-display mt-14 text-center text-xl font-bold text-brand-950">Tunas Harapan</p>
             <p className="mt-1 text-center text-[10px] font-bold uppercase tracking-[.24em] text-slate-500">Kabupaten Semarang</p>
           </motion.div>
+        </div>
+
+        {/* Pita foto kampus: Beranda tidak memakai PageHeader, jadi foto asli masuk
+            lewat marquee yang berjalan pelan dan berhenti saat disentuh kursor.
+            Pembungkusnya meniru pita statistik di bawahnya agar ikut tema gelap. */}
+        <div className="relative border-t border-brand-900/10 bg-white/70">
+          <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 pt-7">
+            <span className="h-px w-10 bg-brand-600" aria-hidden="true" />
+            <p className="text-xs font-bold uppercase tracking-[.2em] text-brand-700">Suasana Kampus</p>
+          </div>
+          <div className="marquee-mask py-6">
+            <div className="marquee-track">
+              {fotoDuplikat.map((foto, i) => (
+                <FotoPlate key={`${foto.src}-${i}`} foto={foto} salinan={i >= fotoMarquee.length} />
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="relative border-y border-brand-900/10 bg-white/70">

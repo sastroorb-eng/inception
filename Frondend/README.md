@@ -1,16 +1,50 @@
-# React + Vite
+# AskTunas — Frontend (folder `Frondend/`)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Portal informasi SMK Telekomunikasi Tunas Harapan + antarmuka asisten virtual, dibangun
+untuk INCEPTION 2026. React 19 + Vite + Tailwind v4 + framer-motion + react-router-dom 7.
 
-Currently, two official plugins are available:
+## Menjalankan
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm ci
+npm run dev      # http://localhost:5173 (port bergeser kalau sudah dipakai)
+npm run build    # produksi ke dist/
+npm run preview  # pratinjau hasil build
+npm run lint     # oxlint
+```
 
-## React Compiler
+## Tempat apa berada
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Berkas | Isi |
+|---|---|
+| `src/data/content.js` | **Satu-satunya sumber teks & data sekolah.** Semua halaman membaca dari sini. |
+| `src/index.css` | Design token (`@theme`), gaya komponen (`.btn`, `.depth-card`, `.band-*`), dan seluruh override mode gelap `html.dark`. |
+| `src/App.jsx` | Daftar rute — sumber tercepat untuk tahu halaman apa saja yang ada. |
+| `src/services/chat.js` | Pemanggilan API asisten (`https://inception-ebon.vercel.app/api/chat`). |
+| `src/components/TunasChat.jsx` | Komponen chat di `/chat`. |
+| `public/images/` | Foto galeri, lambang jurusan (`jurusan/`), logo mitra (`mitra/`), ikon PWA. |
 
-## Expanding the Oxlint configuration
+## Aturan data
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- Jangan mengarang nama orang, jabatan, angka, biaya, atau caption foto. Kalau belum ada
+  datanya, biarkan `null`/`[]` — halaman sudah menampilkan empty state yang jujur.
+- Tandai slot yang menunggu data resmi dengan komentar `[ISI DATA ASLI]`.
+- Data yang dikirim tim dikumpulkan di `../chatbot-nextjs/data_sekolah/*.md` (dipakai juga
+  oleh asisten virtual). Saat menyalin dari sana, sebut sumbernya di komentar seperti yang
+  sudah dilakukan pada `fasilitas`, `pkl`, `bkk`, `tataTertib`, `ppdbResmi`, dan `guru`.
+- Rincian biaya PPDB di sumber tim masih tertulis "mengacu data PPDB 2022/2023" — jangan
+  ditampilkan sebelum panitia mengonfirmasi angka tahun berjalan.
+
+## Mode gelap
+
+Tema gelap memakai override per utilitas (`html.dark .text-slate-600 { ... }`), bukan
+membalik token `--color-brand-*`. Penyebabnya: `bg-brand-950` (permukaan gelap) dan
+`text-brand-950` (teks gelap) memakai token yang sama, jadi memalik token membuat salah
+satu tidak terbaca. Jangan gunakan `!important` atau inline style untuk soal warna.
+
+## Keamanan
+
+- Jangan menaruh API key apa pun di kode client. Key Groq hanya ada di backend
+  (`chatbot-nextjs/.env.local`, sudah di-gitignore).
+- `/admin` hanya dashboard lokal (membaca `localStorage`), bukan sistem panitia sungguhan,
+  dan sudah `noindex`.

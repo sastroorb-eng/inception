@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PageHeader from '../components/PageHeader'
 import Reveal from '../components/Reveal'
 import Seo from '../components/Seo'
-import { school, jurusan, identitas } from '../data/content'
+import { school, jurusan, identitas, ppdbResmi } from '../data/content'
 
 const mapsSrc = `https://www.google.com/maps?q=${encodeURIComponent(school.address)}&output=embed`
 const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(school.address)}`
@@ -11,7 +11,7 @@ const mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURICom
 const faq = [
   {
     q: 'Bagaimana cara mendaftar PPDB?',
-    a: 'Buka menu "PPDB", isi formulir tiga langkah: data siswa, pilihan program keahlian dan unggah berkas persyaratan, lalu konfirmasi dan kirim. Panitia akan memverifikasi data pendaftar.',
+    a: `Buka menu "PPDB", isi formulir tiga langkah: data siswa, pilihan program keahlian dan unggah berkas persyaratan, lalu konfirmasi. Formulir online bersifat sementara sebagai bukti pendaftaran awal — data lengkap diisi saat pendaftaran langsung di sekolah, dan info waktu tes dikirim lewat WhatsApp. Pendaftaran resmi panitia juga tersedia di ${ppdbResmi.portal}.`,
   },
   {
     q: 'Program keahlian apa saja yang tersedia?',
@@ -19,7 +19,11 @@ const faq = [
   },
   {
     q: 'Di mana lokasi sekolah?',
-    a: `${school.address}. Tombol "Buka di Google Maps" di halaman ini menampilkan rute lengkap.`,
+    a: `${school.address}. ${school.lokasiCatatan} Tombol "Buka di Google Maps" di halaman ini menampilkan rute lengkap.`,
+  },
+  {
+    q: 'Kenapa sekolah ini kadang disebut SMK Telkom Salatiga?',
+    a: `Nama resminya ${school.name}. ${school.lokasiCatatan} Sebutan "Salatiga" muncul karena lokasi sekolah tepat di perbatasan dengan Kota Salatiga.`,
   },
   {
     q: 'Jam layanan tata usaha?',
@@ -83,6 +87,7 @@ export default function Kontak() {
             <div className="depth-card h-full rounded-xl p-6">
               <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Alamat</p>
               <p className="mt-3 text-sm leading-6 text-slate-600">{school.address}</p>
+              <p className="mt-2 text-xs leading-5 text-slate-500">{school.lokasiCatatan}</p>
               <a href={mapsLink} target="_blank" rel="noopener noreferrer" className="footer-link mt-4 inline-block text-sm font-semibold text-brand-800">
                 Buka di Google Maps ↗
               </a>

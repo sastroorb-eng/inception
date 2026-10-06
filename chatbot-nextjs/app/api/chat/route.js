@@ -7,9 +7,6 @@ import Groq from 'groq-sdk';
 // Next.js secara otomatis akan membaca kunci dari file .env.local
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-// Variabel memori global untuk menyimpan riwayat chat sementara
-let riwayatChat = [];
-
 // 2. FUNGSI MEMBACA SEMUA DATA SEKOLAH DARI FOLDER .md
 function muatSemuaDataSekolah() {
     let semuaData = "";
@@ -71,18 +68,29 @@ export async function POST(request) {
             return NextResponse.json({ error: "Pesan tidak boleh kosong" }, { status: 400 });
         }
 
-        // Simpan pesan user ke memori
-        riwayatChat.push({ role: "user", content: pesanUser });
+        // Riwayat dikirim oleh tiap sesi dari frontend, bukan disimpan di server.
+        // Kalau disimpan di variabel modul, obrolan pengunjung A bisa ikut menjawab
+        // pertanyaan pengunjung B yang memakai instance function yang sama.
+        const riwayat = Array.isArray(body.riwayat)
+            ? body.riwayat
+                .filter(
+                    (pesan) =>
+                        pesan &&
+                        (pesan.role === "user" || pesan.role === "assistant") &&
+                        typeof pesan.content === "string" &&
+                        pesan.content.trim()
+                )
+                .slice(-6)
+                .map((pesan) => ({ role: pesan.role, content: pesan.content.slice(0, 2000) }))
+            : [];
 
-        // Batasi memori maksimal 6 pesan agar token tetap hemat
-        if (riwayatChat.length > 6) {
-            riwayatChat.shift(); // Hapus pesan paling lama (index 0)
-        }
+        // Gabungkan instruksi utama, riwayat sesi ini, lalu pesan terbaru
+        const pesanLengkap = [
+            { role: "system", content: instruksiSekolah },
+            ...riwayat,
+            { role: "user", content: pesanUser },
+        ];
 
-        // Gabungkan instruksi utama dengan riwayat obrolan
-        const pesanLengkap = [{ role: "system", content: instruksiSekolah }, ...riwayatChat];
-
-     // ... (kode sebelumnya)
         // Eksekusi ke Groq menggunakan model andalan
         const chatCompletion = await groq.chat.completions.create({
             messages: pesanLengkap,
@@ -97,19 +105,16 @@ export async function POST(request) {
         // Ini akan mencari semua kombinasi ** dan * lalu menghapusnya
         const jawabanBersih = jawabanAi.replace(/\*{1,2}/g, ""); 
 
-        // Simpan balasan AI yang sudah bersih ke memori
-        riwayatChat.push({ role: "assistant", content: jawabanBersih });
-
         // Kembalikan balasan yang sudah BERSIH ke frontend
         return NextResponse.json({ balasan: jawabanBersih }, { status: 200 });
 
     } catch (error) {
-        // ...
         console.error("Error dari Groq:", error);
         return NextResponse.json({ error: "Terjadi kesalahan pada server AI" }, { status: 500 });
     }
 }
 
+// Preflight CORS: browser mengirim OPTIONS lebih dulu karena body-nya JSON.
 export async function OPTIONS() {
   return new Response(null, {
     status: 200,

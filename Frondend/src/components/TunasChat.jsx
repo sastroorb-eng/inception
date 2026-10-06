@@ -1,12 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
+import { sendMessage } from "../services/chat";
+import { school } from "../data/content";
+
+const KUNCI_CHAT = "chat_tunasbot";
+
+const buatId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 export default function TunasBot() {
   const [input, setInput] = useState("");
   const [chat, setChat] = useState([]);
   const [loading, setLoading] = useState(false);
-  
-  const [isMounted, setIsMounted] = useState(false); 
+  const [konfirmasiReset, setKonfirmasiReset] = useState(false);
+  const [pesanSuara, setPesanSuara] = useState("");
+
+  const [isMounted, setIsMounted] = useState(false);
   const chatEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -14,22 +23,25 @@ export default function TunasBot() {
 
   const getWaktuSalam = () => {
     const jam = new Date().getHours();
-    if (jam < 11) return "Selamat Pagi 🌞";
-    if (jam < 15) return "Selamat Siang ☀️";
-    if (jam < 18) return "Selamat Sore 🌇";
-    return "Selamat Malam 🌙";
+    if (jam < 11) return "Selamat pagi";
+    if (jam < 15) return "Selamat siang";
+    if (jam < 18) return "Selamat sore";
+    return "Selamat malam";
   };
 
-  const pesanAwal = { 
-    role: "assistant", 
-    content: `${getWaktuSalam()} Kak! 👋 Aku TunasBot, asisten virtual SMK Telekomunikasi Tunas Harapan. Ada yang ingin ditanyakan seputar sekolah, jurusan, atau PPDB?` 
+  const pesanAwal = {
+    id: buatId(),
+    role: "assistant",
+    content: `${getWaktuSalam()} Kak. Aku TunasBot, asisten virtual ${school.name}. Ada yang ingin ditanyakan seputar sekolah, jurusan, atau PPDB?`,
   };
 
   useEffect(() => {
     setIsMounted(true);
-    const simpananChat = localStorage.getItem("chat_tunasbot");
+    const simpananChat = localStorage.getItem(KUNCI_CHAT);
     if (simpananChat) {
-      setChat(JSON.parse(simpananChat));
+      // Pesan lama dari versi sebelumnya belum punya id, jadi dilengkapi saat dimuat.
+      const dipulihkan = JSON.parse(simpananChat).map((pesan) => ({ ...pesan, id: pesan.id || buatId() }));
+      setChat(dipulihkan);
     } else {
       setChat([pesanAwal]);
     }
@@ -37,10 +49,16 @@ export default function TunasBot() {
 
   useEffect(() => {
     if (isMounted) {
-      localStorage.setItem("chat_tunasbot", JSON.stringify(chat));
+      localStorage.setItem(KUNCI_CHAT, JSON.stringify(chat));
     }
     scrollToBottom();
   }, [chat, isMounted]);
+
+  useEffect(() => {
+    if (!pesanSuara) return;
+    const id = setTimeout(() => setPesanSuara(""), 4000);
+    return () => clearTimeout(id);
+  }, [pesanSuara]);
 
   const pertanyaanCepat = [
     "Berapa biaya masuk PPDB?",
@@ -50,16 +68,16 @@ export default function TunasBot() {
   ];
 
   const bacakanTeks = (teks) => {
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel(); 
-      const suara = new SpeechSynthesisUtterance(teks);
-      suara.lang = "id-ID"; 
-      suara.rate = 1.0; 
-      suara.pitch = 1.0; 
-      window.speechSynthesis.speak(suara);
-    } else {
-      alert("Maaf, browsermu tidak mendukung fitur suara.");
+    if (!("speechSynthesis" in window)) {
+      setPesanSuara("Peramban ini tidak mendukung fitur suara.");
+      return;
     }
+    window.speechSynthesis.cancel();
+    const suara = new SpeechSynthesisUtterance(teks);
+    suara.lang = "id-ID";
+    suara.rate = 1.0;
+    suara.pitch = 1.0;
+    window.speechSynthesis.speak(suara);
   };
 
   const hentikanSuara = () => {
@@ -71,32 +89,25 @@ export default function TunasBot() {
   const kirimPesan = async (teksPesan = input) => {
     if (!teksPesan.trim() || loading) return;
 
-    const pesanUser = { role: "user", content: teksPesan };
+    const pesanUser = { id: buatId(), role: "user", content: teksPesan };
+    const riwayat = chat;
     setChat((prev) => [...prev, pesanUser]);
-    setInput(""); 
+    setInput("");
     setLoading(true);
 
     try {
-      const res = await fetch("https://inception-ebon.vercel.app/api/chat", {
-    
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pesan: pesanUser.content }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Gagal terhubung");
-      }
-
-      const balasanAi = { role: "assistant", content: data.balasan };
-      setChat((prev) => [...prev, balasanAi]);
+      const balasan = await sendMessage(pesanUser.content, riwayat);
+      setChat((prev) => [...prev, { id: buatId(), role: "assistant", content: balasan }]);
 
     } catch (err) {
-      setChat((prev) => [...prev, { role: "assistant", content: `Waduh error: ${err.message} 😅 (Periksa koneksi / CORS Vercel)` }]);
+      setChat((prev) => [...prev, {
+        id: buatId(),
+        role: "assistant",
+        content: `Maaf, jawaban belum bisa diambil: ${err.message} Periksa koneksi, lalu coba kirim lagi.`,
+      }]);
     } finally {
       setLoading(false);
+      inputRef.current?.focus();
     }
   };
 
@@ -108,11 +119,10 @@ export default function TunasBot() {
   };
 
   const hapusObrolan = () => {
-    if(window.confirm("Yakin ingin mereset obrolan dengan TunasBot?")) {
-      setChat([pesanAwal]);
-      localStorage.removeItem("chat_tunasbot");
-      hentikanSuara(); 
-    }
+    setChat([{ ...pesanAwal, id: buatId() }]);
+    localStorage.removeItem(KUNCI_CHAT);
+    hentikanSuara();
+    setKonfirmasiReset(false);
   };
 
   const unduhObrolan = () => {
@@ -129,43 +139,63 @@ export default function TunasBot() {
   if (!isMounted) return null;
 
   return (
-    // Menggunakan tema warna gelap yang selaras dengan background web (Navy/Dark slate dengan aksen emas)
-    <div className="flex flex-col h-[650px] w-full max-w-3xl mx-auto bg-[#0f172a] font-sans border border-slate-700 rounded-2xl shadow-2xl overflow-hidden text-slate-100">
-      
-      {/* Header */}
-      <header className="bg-[#1e293b] shadow-md p-4 flex justify-between items-center border-b border-slate-700">
+    <div className="depth-card mx-auto flex h-[650px] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-line bg-card text-ink">
+
+      <header className="flex items-center justify-between gap-3 border-b border-brand-900/30 bg-brand-950 px-4 py-3 text-white">
         <div>
-          <h1 className="font-bold text-lg text-white flex items-center gap-2">TunasBot 🤖</h1>
-          <p className="text-xs text-slate-400">Asisten Virtual SMK Telkom Salatiga</p>
+          <h2 className="font-display text-lg font-bold">TunasBot</h2>
+          <p className="text-xs text-brand-100/75">Asisten Virtual {school.name}</p>
         </div>
-        
+
         <div className="flex gap-2">
-          <button onClick={hentikanSuara} className="text-xs bg-slate-800 hover:bg-slate-700 text-yellow-400 border border-slate-600 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1" title="Hentikan Suara">
-            🔇 Stop
+          <button onClick={hentikanSuara} className="btn btn-ghost btn-sm" title="Hentikan suara">
+            Hentikan Suara
           </button>
-          <button onClick={unduhObrolan} className="text-xs bg-slate-800 hover:bg-slate-700 text-green-400 border border-slate-600 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1" title="Download Riwayat">
-            📥 Simpan
+          <button onClick={unduhObrolan} className="btn btn-ghost btn-sm" title="Unduh riwayat obrolan">
+            Simpan
           </button>
-          <button onClick={hapusObrolan} className="text-xs bg-slate-800 hover:bg-slate-700 text-red-400 border border-slate-600 px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1" title="Mulai Ulang">
-            🗑️ Reset
+          <button
+            onClick={() => setKonfirmasiReset(true)}
+            className="btn btn-ghost btn-sm"
+            title="Mulai obrolan baru"
+          >
+            Reset
           </button>
         </div>
       </header>
 
-      {/* Ruang Chat */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#0b1329]">
-        {chat.map((c, i) => (
-          <div key={i} className={`flex ${c.role === "user" ? "justify-end" : "justify-start"}`}>
-            <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-[14px] leading-relaxed whitespace-pre-wrap ${
-              c.role === "user" 
-                ? "bg-blue-600 text-white rounded-br-none shadow-md" 
-                : "bg-[#1e293b] text-slate-200 shadow-md rounded-bl-none border border-slate-700"
+      {konfirmasiReset && (
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-accent-300/25 px-4 py-2 text-sm text-ink">
+          <p>Reset obrolan dan hapus riwayat tersimpan di peramban ini?</p>
+          <div className="flex gap-2">
+            <button onClick={hapusObrolan} className="btn btn-primary btn-sm">Ya, reset</button>
+            <button onClick={() => setKonfirmasiReset(false)} className="btn btn-ghost btn-sm">Batal</button>
+          </div>
+        </div>
+      )}
+
+      {pesanSuara && (
+        <p role="status" className="border-b border-line bg-brand-50 px-4 py-2 text-sm text-brand-800">
+          {pesanSuara}
+        </p>
+      )}
+
+      <div className="flex-1 space-y-4 overflow-y-auto bg-paper p-4" role="log" aria-live="polite" aria-label="Percakapan dengan TunasBot">
+        {chat.map((c) => (
+          <div key={c.id} className={`flex ${c.role === "user" ? "justify-end" : "justify-start"}`}>
+            <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-[14px] leading-relaxed whitespace-pre-wrap ${
+              c.role === "user"
+                ? "rounded-br-none bg-brand-900 text-white"
+                : "rounded-bl-none border border-line bg-card text-ink"
             }`}>
               {c.content}
               {c.role === "assistant" && (
-                <div className="mt-2 pt-2 border-t border-slate-700/60 flex justify-end">
-                  <button onClick={() => bacakanTeks(c.content)} className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 font-medium transition">
-                    🔊 Putar Suara
+                <div className="mt-2 flex justify-end border-t border-line pt-2">
+                  <button
+                    onClick={() => bacakanTeks(c.content)}
+                    className="text-xs font-semibold text-brand-600 underline-offset-4 hover:underline"
+                  >
+                    Putar Suara
                   </button>
                 </div>
               )}
@@ -174,33 +204,42 @@ export default function TunasBot() {
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-[#1e293b] text-slate-400 border border-slate-700 px-4 py-2 rounded-2xl rounded-bl-none shadow-sm text-sm animate-pulse">
-              TunasBot sedang mengetik...
-            </div>
+            <p className="rounded-2xl rounded-bl-none border border-line bg-card px-4 py-2 text-sm text-ink-soft animate-pulse">
+              TunasBot sedang menyiapkan jawaban...
+            </p>
           </div>
         )}
         <div ref={chatEndRef} />
       </div>
 
-      {/* Pertanyaan Cepat */}
-      <div className="bg-[#1e293b] px-4 pt-3 pb-2 flex gap-2 overflow-x-auto whitespace-nowrap scrollbar-hide border-t border-slate-700">
-        {pertanyaanCepat.map((tanya, index) => (
-          <button key={index} onClick={() => kirimPesan(tanya)} disabled={loading} className="inline-flex bg-slate-800 hover:bg-slate-700 text-blue-300 border border-slate-600 text-xs px-4 py-2 rounded-full transition disabled:opacity-50">
+      <div className="flex gap-2 overflow-x-auto whitespace-nowrap border-t border-line bg-card px-4 pt-3 pb-2">
+        {pertanyaanCepat.map((tanya) => (
+          <button
+            key={tanya}
+            onClick={() => kirimPesan(tanya)}
+            disabled={loading}
+            className="shrink-0 rounded-full border border-line bg-paper px-4 py-2 text-xs text-brand-800 transition hover:bg-brand-50 disabled:opacity-50"
+          >
             {tanya}
           </button>
         ))}
       </div>
 
-      {/* Input Pesan */}
-      <div className="bg-[#1e293b] p-4 border-t border-slate-700 flex gap-2">
-        <input 
-          className="flex-1 bg-[#0f172a] border border-slate-600 rounded-full px-4 py-2 text-sm text-white placeholder-slate-400 outline-none focus:ring-2 focus:ring-blue-500" 
-          placeholder="Tanya TunasBot di sini..." 
-          value={input} 
-          onChange={(e) => setInput(e.target.value)} 
-          onKeyDown={handleKeyDown} 
+      <div className="flex gap-2 border-t border-line bg-card p-4">
+        <input
+          ref={inputRef}
+          className="flex-1 rounded-full border border-line bg-paper px-4 py-2 text-sm text-ink outline-none placeholder:text-ink-soft focus:border-brand-500"
+          placeholder="Tanya TunasBot di sini..."
+          aria-label="Tulis pertanyaan untuk TunasBot"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
-        <button onClick={() => kirimPesan(input)} disabled={loading} className="bg-blue-600 hover:bg-blue-700 disabled:bg-slate-700 text-white px-6 py-2 rounded-full text-sm font-semibold transition shadow-md">
+        <button
+          onClick={() => kirimPesan(input)}
+          disabled={loading || !input.trim()}
+          className="btn btn-primary"
+        >
           Kirim
         </button>
       </div>

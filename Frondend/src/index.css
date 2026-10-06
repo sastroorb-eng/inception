@@ -351,6 +351,21 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
       radial-gradient(circle at 78% 22%, rgba(93, 139, 189, 0.2), transparent 22rem),
       linear-gradient(118deg, var(--color-brand-950) 0%, var(--color-brand-800) 70%, var(--color-brand-700) 100%);
   }
+  /* Banner judul berfoto asli sekolah. Urutan lapisan: scrim pekat di kiri tempat
+     teks putih berada, foto di tengah, gradasi lama paling bawah sebagai cadangan
+     kalau berkas fotonya tidak ikut terdeploy. Halaman tanpa kelas ini tetap polos. */
+  .page-header--foto {
+    background:
+      linear-gradient(104deg, rgba(9, 20, 33, 0.94) 0%, rgba(9, 20, 33, 0.84) 42%, rgba(9, 20, 33, 0.48) 100%),
+      var(--header-photo) center / cover no-repeat,
+      linear-gradient(118deg, var(--color-brand-950) 0%, var(--color-brand-800) 70%, var(--color-brand-700) 100%);
+  }
+  .page-header--profil { --header-photo: url('/images/galeri/papan-nama-sekolah.jpg'); }
+  .page-header--jurusan { --header-photo: url('/images/situs/lab-komputer.jpg'); }
+  .page-header--galeri { --header-photo: url('/images/galeri/area-parkir-pagi.jpg'); }
+  .page-header--ppdb { --header-photo: url('/images/situs/bengkel-otomotif.jpg'); }
+  .page-header--kontak { --header-photo: url('/images/situs/papan-nama-sisi.jpg'); }
+  .page-header--chat { --header-photo: url('/images/situs/perpustakaan.jpg'); }
   .page-header__grid {
     position: absolute;
     inset: 0;
@@ -616,23 +631,6 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
     50% { transform: translate3d(10px, 12px, 0) rotateX(-7deg) rotateY(7deg) rotateZ(2.5deg) scale(1.025); }
   }
 
-  .isometric-mark {
-    position: relative;
-    width: 72px;
-    height: 72px;
-    transform-style: preserve-3d;
-    transform: rotateX(58deg) rotateZ(45deg);
-  }
-  .isometric-mark span {
-    position: absolute;
-    inset: 0;
-    border: 1px solid rgba(47, 75, 124, 0.28);
-    background: color-mix(in srgb, var(--color-brand-300) 40%, var(--color-card));
-    box-shadow: 7px 7px 0 rgba(47, 75, 124, 0.15);
-  }
-  .isometric-mark span:nth-child(2) { transform: translateZ(14px); background: var(--color-card); }
-  .isometric-mark span:nth-child(3) { transform: translateZ(28px); background: var(--color-brand-100); }
-
   /* Lambang program keahlian pada kartu Beranda. Berkas asli kiriman tim
      (public/images/jurusan/), dibingkai seukuran badge lama agar kartu tidak geser. */
   .program-logo {
@@ -685,6 +683,25 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
     text-align: center;
     color: var(--color-brand-800);
   }
+  /* Marquee foto kampus di Beranda: memakai .marquee-track + .marquee-mask milik
+     marquee mitra, jadi durasi, jeda saat hover dan fade tepi sudah ikut. Ukuran
+     kartu dikunci agar foto landscape dan portrait tersusun rata. */
+  .marquee-photo {
+    flex: none;
+    width: 240px;
+    height: 150px;
+    margin-inline: 10px;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: 14px;
+    background: var(--color-brand-100);
+  }
+  .marquee-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  html.dark .marquee-photo { border-color: rgba(255, 255, 255, .14); }
   /* Penghubung bagan struktur organisasi: trunk dari tier induk (org-row::before),
      bus horizontal + drop per kartu (org-cell::after / ::before). Gap vertikal antar
      tier = space-y-9 (2.25rem), gap horizontal = gap-5 (1.25rem). */
@@ -717,10 +734,12 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
     height: 2px;
     background: var(--color-brand-300);
   }
-  .org-cell:first-child::after { left: 50%; }
-  .org-cell:last-child::after { right: 50%; }
-  .org-cell:only-child::before,
-  .org-cell:only-child::after { display: none; }
+  /* of-type, bukan child: baris tertentu menyisipkan span dekoratif (foot-head/elbow)
+     sebelum kartu, dan span itu membuat :first-child tidak pernah match ke kartu. */
+  .org-cell:first-of-type::after { left: 50%; }
+  .org-cell:last-of-type::after { right: 50%; }
+  .org-cell:only-of-type::before,
+  .org-cell:only-of-type::after { display: none; }
   /* Baris tier satu kartu: trunk lurus sampai puncak kartu. */
   .org-row--1::before { height: 2.25rem; }
   /* Kepala panah garis komando (mengarah ke bawah) di puncak tiap kartu, ala bagan resmi. */
@@ -734,62 +753,29 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
     border-inline: 0.3rem solid transparent;
     border-top: 0.45rem solid var(--color-brand-300);
   }
-  /* Bus koordinasi putus-putus di bawah baris Staff (9 kolom) & Guru (5 kolom).
-     Inset = setengah lebar kolom (rumus (100% - total gap) / 2 / jumlah kolom)
-     agar ujung garis tepat di tengah kartu terluar. Hanya valid di lg ke atas. */
-  .org-row--below9::after,
-  .org-row--below5::after {
-    content: "";
-    position: absolute;
-    top: calc(100% + 0.45rem);
-    border-top: 2px dashed var(--color-brand-400);
-  }
-  .org-row--below9::after { left: calc((100% - 10rem) / 18); right: calc((100% - 10rem) / 18); }
-  .org-row--below5::after { left: calc((100% - 5rem) / 10); right: calc((100% - 5rem) / 10); }
-  /* Kepala panah naik di kedua ujung bus putus-putus bawah Staff & Guru. */
-  .org-foot-head {
-    position: absolute;
-    top: 100%;
+  /* Komite Sekolah bukan bawahan, jadi garisnya putus-putus. Drop-nya naik sampai
+     tinggi bus, lalu setengah kiri koridor ikut jadi bus — tapi bus koordinasi —
+     sampai mentok trunk komando di tengah baris. Setengah kanannya tetap bus komando.
+     right: -50% - gap = persis tengah kolom berikutnya pada grid 3 kolom sama lebar,
+     jadi titik pertemuannya dengan trunk tidak perlu angka penyesuaian. */
+  .org-cell--dash::before {
     width: 0;
-    height: 0;
-    border-inline: 0.3rem solid transparent;
-    border-bottom: 0.45rem solid var(--color-brand-400);
-  }
-  .org-row--below9 .org-foot-head--left { left: calc((100% - 10rem) / 18); transform: translateX(-50%); }
-  .org-row--below9 .org-foot-head--right { right: calc((100% - 10rem) / 18); transform: translateX(50%); }
-  .org-row--below5 .org-foot-head--left { left: calc((100% - 5rem) / 10); transform: translateX(-50%); }
-  .org-row--below5 .org-foot-head--right { right: calc((100% - 5rem) / 10); transform: translateX(50%); }
-  /* Siku koordinasi dashed ala bagan resmi: Komite naik ke Kepala SMK,
-     Wali Kelas naik ke ujung kanan bus Guru. Hanya valid di layout lg. */
-  .org-elbow-h {
-    position: absolute;
-    top: -1.125rem;
-    border-top: 2px dashed var(--color-brand-400);
-  }
-  .org-elbow-v {
-    position: absolute;
-    top: -2.25rem;
-    height: 1.125rem;
+    background: none;
     border-left: 2px dashed var(--color-brand-400);
   }
-  .org-elbow-komite-h { left: calc((100% - 2.5rem) / 3 + 1.25rem); right: calc(50% + .65rem); }
-  .org-elbow-komite-v { left: calc(50% - .75rem); }
-  .org-elbow-head {
-    position: absolute;
-    top: -2.25rem;
-    left: calc(50% - .75rem);
-    width: 0;
+  .org-cell--dash::after {
+    left: 50%;
+    right: calc(-50% - 1.25rem);
     height: 0;
-    transform: translateX(-50%);
-    border-inline: 0.3rem solid transparent;
-    border-bottom: 0.45rem solid var(--color-brand-400);
+    background: none;
+    border-top: 2px dashed var(--color-brand-400);
   }
-  /* Kartu Wali Kelas = max-w-xs (20rem) terpusat; ujung kanan bus Guru = tengah + 22.9rem. */
-  .org-elbow-wali-h { left: calc(50% + 10rem); width: 12.9rem; }
-  .org-elbow-wali-v { left: calc(50% + 22.9rem); }
+  .org-cell--dash + .org-cell::after { left: 50%; }
+  /* Kepala panah solid di ujung garis dashed kelihatan seperti salah tempel. */
+  .org-cell--dash .org-head { display: none; }
   /* Panah horizontal antar kartu ala bagan resmi: solid = perintah
-     (Yayasan→Kepsek, Ka.TU→Bendahara), putus-putus = koordinasi
-     (Kepsek↔Partner, Komite, Waka↔Waka, K3↔K3). Lebar = gap grid (1.25rem). */
+     (Yayasan→Kepsek), putus-putus = koordinasi (Kepsek↔Partner, Waka↔Waka, K3↔K3).
+     Lebar = gap grid (1.25rem), tingginya di tengah kartu: tak ada angka penyesuaian. */
   .org-link {
     position: absolute;
     top: 50%;
@@ -800,18 +786,14 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
   .org-link--left { left: -1.25rem; }
   .org-link--right { right: -1.25rem; }
   .org-link--dash { border-top-style: dashed; }
-  .org-link--head-r::after,
-  .org-link--head-l::before {
+  .org-link--head-r::after {
     content: "";
     position: absolute;
     top: -0.25rem;
+    right: -2px;
     border-block: 0.25rem solid transparent;
+    border-left: 0.4rem solid var(--color-brand-500);
   }
-  .org-link--head-r::after { right: -2px; border-left: 0.4rem solid var(--color-brand-500); }
-  .org-link--head-l::before { left: -2px; border-right: 0.4rem solid var(--color-brand-500); }
-  /* Tier Komite/Ka.TU/Bendahara: trunk jatuh ke kartu tengah; kartu samping cukup dipanah. */
-  .org-cell--nodrop::before { display: none; }
-  .org-row--nobus > .org-cell::after { display: none; }
   /* 4-kartu baru satu baris di lg; di bawahnya grid jadi 2x2 — sambungkan trunk saja.
      Baris 5 & 9 unit juga wrap (jadi 3 kolom) di bawah lg — trunk penuh, tanpa bus/drop. */
   @media (max-width: 1023px) {
@@ -827,12 +809,6 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
     .org-row--4 .org-head,
     .org-row--5 .org-head,
     .org-row--9 .org-head,
-    .org-row--below5::after,
-    .org-row--below9::after,
-    .org-foot-head,
-    .org-elbow-h,
-    .org-elbow-v,
-    .org-elbow-head { display: none; }
     /* Sel pertama baris ke-2 layout 2x2 tidak punya tetangga kiri. */
     .org-row--4 > .org-cell:nth-child(3) > .org-link { display: none; }
   }
@@ -868,15 +844,6 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
   }
   .org-banner::before { left: 2.25rem; }
   .org-banner::after { right: 2.25rem; }
-
-  /* Kunci legenda bagan. */
-  .org-key {
-    display: inline-block;
-    width: 2.25rem;
-    height: 0;
-    border-top: 2px solid var(--color-brand-700);
-  }
-  .org-key--dash { border-top-style: dashed; border-top-color: var(--color-brand-500); }
 }
 
 @media (prefers-reduced-motion: reduce) {
