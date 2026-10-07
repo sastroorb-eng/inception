@@ -66,18 +66,20 @@ export default function Navbar() {
           scrolled ? 'py-2' : 'py-3'
         }`}
       >
-        <Link to="/" className="flex items-center gap-3">
-          <img src={school.logo} alt={`Logo ${school.shortName}`} className="h-11 w-11 object-contain" />
+        <Link to="/" className="flex items-center gap-2 sm:gap-3">
+          <img src={school.logo} alt={`Logo ${school.shortName}`} className="h-11 w-11 shrink-0 object-contain" />
           <span className="leading-tight">
-            <span className="font-display block text-base font-bold text-brand-950">Tunas Harapan</span>
-            <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-              Sekolah Menengah Kejuruan
+            {/* Nama resmi lengkap. Di 1024 px satu barisnya makan tempat sampai
+                menu desktop penyok, jadi lebarnya dibatasi 12rem dan text-balance
+                memecahnya rata: "SMK Telekomunikasi" / "Tunas Harapan". */}
+            <span className="font-display block max-w-[12rem] text-balance text-[13px] font-bold text-brand-950 sm:text-sm xl:text-base">
+              {school.name}
             </span>
           </span>
         </Link>
 
         {/* Desktop */}
-        <div className="hidden items-center gap-3 lg:flex" ref={megaRef}>
+        <div className="hidden items-center gap-3 lg:flex xl:gap-5" ref={megaRef}>
           {links.slice(0, 2).map((link) => (
             <NavLink key={link.to} to={link.to} className={navClass} end>
               {link.label}
@@ -157,8 +159,11 @@ export default function Navbar() {
               {link.label}
             </NavLink>
           ))}
-          <ThemeToggle />
+
           <Link to="/chat" className="btn btn-primary btn-sm">Layanan Informasi</Link>
+          {/* Toggle tema paling kanan, sesudah tombol aksi, supaya tidak terlihat
+              seperti salah satu item menu. */}
+          <ThemeToggle />
         </div>
 
         {/* Mobile toggle */}

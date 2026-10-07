@@ -26,11 +26,9 @@ export default function PageHeader({ title, subtitle }) {
   return (
     <header className={`page-header${photo ? ` page-header--foto page-header--${photo}` : ''}`}>
       <div className="page-header__grid" aria-hidden="true" />
-      {/* Lencana sekolah di kanan banner, murni sebagai watermark: tanpa pelat,
-          border, atau pita. */}
-      <div className="page-header__frame" aria-hidden="true">
-        <img className="page-header__logo" src={school.logo} alt="" />
-      </div>
+      {/* Lencana sekolah di sudut kanan atas banner, murni sebagai watermark:
+          tanpa pelat, border, pita, dan tanpa gerakan. */}
+      <img className="page-header__logo" src={school.logo} alt="" aria-hidden="true" />
       <div className="relative mx-auto max-w-6xl px-4 py-16 sm:py-20">
         <div data-reveal={shown ? 'shown' : 'hidden'} className="reveal max-w-3xl">
           <span className="flex items-center gap-3 text-xs font-bold uppercase tracking-[.22em] text-accent-400">
