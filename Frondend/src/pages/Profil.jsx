@@ -279,24 +279,28 @@ export default function Profil() {
               </div>
             ) : (
               <div className="depth-card mt-8 overflow-hidden rounded-xl bg-brand-100">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-brand-200 text-xs uppercase text-slate-600">
-                    <tr>
-                      <th className="px-5 py-3">Nama</th>
-                      <th className="px-5 py-3">Jabatan</th>
-                      <th className="px-5 py-3">Bidang Diampu</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-brand-200">
-                    {guru.map((p) => (
-                      <tr key={p.id}>
-                        <td className="px-5 py-3 font-semibold text-brand-950">{p.nama}</td>
-                        <td className="px-5 py-3 text-slate-600">{p.jabatan}</td>
-                        <td className="px-5 py-3 text-slate-600">{p.mengampu}</td>
+                {/* Lebar tabel guru melebihi layar di bawah 360 px. Dibungkus overflow-x-auto
+                    supaya kolom "Bidang Diampu" bisa digeser, bukan terpotong. */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-brand-200 text-xs uppercase text-slate-600">
+                      <tr>
+                        <th className="px-5 py-3">Nama</th>
+                        <th className="px-5 py-3">Jabatan</th>
+                        <th className="px-5 py-3">Bidang Diampu</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-brand-200">
+                      {guru.map((p) => (
+                        <tr key={p.id}>
+                          <td className="px-5 py-3 font-semibold text-brand-950">{p.nama}</td>
+                          <td className="px-5 py-3 text-slate-600">{p.jabatan}</td>
+                          <td className="px-5 py-3 text-slate-600">{p.mengampu}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             )}
           </Reveal>

@@ -25,7 +25,7 @@ export default function ThemeToggle() {
       aria-pressed={dark}
       aria-label={dark ? 'Aktifkan mode terang' : 'Aktifkan mode gelap'}
       title={dark ? 'Mode terang' : 'Mode gelap'}
-      className="grid h-10 w-10 place-items-center rounded-lg border border-slate-300 bg-white text-brand-900 transition hover:border-brand-400"
+      className="grid h-11 w-11 place-items-center rounded-lg border border-slate-300 bg-white text-brand-900 transition hover:border-brand-400 lg:h-10 lg:w-10"
     >
       {dark ? (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
