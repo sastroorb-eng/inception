@@ -342,6 +342,13 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.15; }
     to { opacity: 1; transform: none; }
   }
 
+  /* Popup TunasBot pojok kanan bawah: panel tumbuh dari arah tombolnya. */
+  .chat-popup { animation: popup-naik 0.18s ease-out both; }
+  @keyframes popup-naik {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: none; }
+  }
+
   /* Editorial page header ---------- */
   .page-header {
     position: relative;
