@@ -1,42 +1,41 @@
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import TiltCard from '../components/TiltCard'
-import Reveal from '../components/Reveal'
-import CountUp from '../components/CountUp'
-import Seo from '../components/Seo'
-import { school, jurusan, stats, berita, visiMisi, industryNetwork, fotoMarquee } from '../data/content'
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import TiltCard from '../components/TiltCard';
+import Reveal from '../components/Reveal';
+import CountUp from '../components/CountUp';
+import Seo from '../components/Seo';
+import { school, jurusan, stats, berita, visiMisi, industryNetwork, fotoMarquee } from '../data/content';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   show: { opacity: 1, y: 0 },
-}
+};
 
 const formatTanggal = (iso) =>
-  new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso))
+  new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
 
-// Marquee mitra: diambil dari daftar mitra per program (jurusan[].partners) — tidak ada data baru.
-const mitraMarquee = jurusan.flatMap((j) => j.partners)
+const mitraMarquee = jurusan.flatMap((j) => j.partners);
 
 function MitraPlate({ mitra, salinan = false }) {
   return (
     <div className="marquee-item" aria-hidden={salinan ? 'true' : undefined}>
-      {mitra.logo
-        ? <img src={mitra.logo} alt={`Logo ${mitra.name}`} loading="lazy" />
-        : <span>{mitra.name}</span>}
+      {mitra.logo ? (
+        <img src={mitra.logo} alt={`Logo ${mitra.name}`} loading="lazy" />
+      ) : (
+        <span>{mitra.name}</span>
+      )}
     </div>
-  )
+  );
 }
 
-// Marquee foto kampus: sama seperti marquee mitra, daftar diulang dua kali supaya
-// loop -50% tidak loncat.
-const fotoDuplikat = [...fotoMarquee, ...fotoMarquee]
+const fotoDuplikat = [...fotoMarquee, ...fotoMarquee];
 
 function FotoPlate({ foto, salinan = false }) {
   return (
     <figure className="marquee-photo" aria-hidden={salinan ? 'true' : undefined}>
       <img src={foto.src} alt={foto.alt} loading="lazy" />
     </figure>
-  )
+  );
 }
 
 export default function Home() {
@@ -89,9 +88,6 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Pita foto kampus: Beranda tidak memakai PageHeader, jadi foto asli masuk
-            lewat marquee yang berjalan pelan dan berhenti saat disentuh kursor.
-            Pembungkusnya meniru pita statistik di bawahnya agar ikut tema gelap. */}
         <div className="relative border-t border-brand-900/10 bg-white/70">
           <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 pt-7">
             <span className="h-px w-10 bg-brand-600" aria-hidden="true" />
@@ -148,7 +144,9 @@ export default function Home() {
                     <h3 className="font-display mt-2 text-2xl font-bold text-brand-950">{program.nama}</h3>
                     <p className="mt-3 text-sm leading-6 text-slate-600">{program.desc}</p>
                     <div className="mt-auto flex flex-wrap gap-2 pt-5">
-                      {program.fokus.map((item) => <span key={item} className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-800">{item}</span>)}
+                      {program.fokus.map((item) => (
+                        <span key={item} className="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-800">{item}</span>
+                      ))}
                     </div>
                   </div>
                 </TiltCard>
@@ -182,7 +180,9 @@ export default function Home() {
                         className="h-16 w-auto max-w-[200px] shrink-0 rounded-lg bg-white object-contain p-2 shadow-[5px_5px_0_var(--color-brand-400)]"
                       />
                     ) : (
-                      <div className="grid h-16 w-16 shrink-0 place-items-center rounded-lg bg-white font-display text-lg font-bold text-brand-900 shadow-[5px_5px_0_var(--color-brand-400)]">{partner.initials}</div>
+                      <div className="grid h-16 w-16 shrink-0 place-items-center rounded-lg bg-white font-display text-lg font-bold text-brand-900 shadow-[5px_5px_0_var(--color-brand-400)]">
+                        {partner.initials}
+                      </div>
                     )}
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wider text-brand-300">{partner.program}</p>
@@ -207,8 +207,25 @@ export default function Home() {
             </div>
           </Reveal>
           <div className="space-y-6">
-            <Reveal><div className="depth-card rounded-2xl p-8"><p className="text-xs font-bold uppercase tracking-wider text-brand-600">Visi</p><p className="font-display mt-3 text-2xl leading-relaxed text-brand-950">{visiMisi.visi}</p></div></Reveal>
-            <Reveal delay={0.08}><div className="depth-card rounded-2xl p-8"><p className="text-xs font-bold uppercase tracking-wider text-brand-600">Misi</p><ol className="mt-4 space-y-4">{visiMisi.misi.map((item, i) => <li key={item} className="flex gap-4 text-slate-600"><span className="font-display text-xl font-bold text-brand-600">{String(i + 1).padStart(2, '0')}</span><span>{item}</span></li>)}</ol></div></Reveal>
+            <Reveal>
+              <div className="depth-card rounded-2xl p-8">
+                <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Visi</p>
+                <p className="font-display mt-3 text-2xl leading-relaxed text-brand-950">{visiMisi.visi}</p>
+              </div>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <div className="depth-card rounded-2xl p-8">
+                <p className="text-xs font-bold uppercase tracking-wider text-brand-600">Misi</p>
+                <ol className="mt-4 space-y-4">
+                  {visiMisi.misi.map((item, i) => (
+                    <li key={item} className="flex gap-4 text-slate-600">
+                      <span className="font-display text-xl font-bold text-brand-600">{String(i + 1).padStart(2, '0')}</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -216,14 +233,16 @@ export default function Home() {
       <section className="band-cream py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-4">
           <Reveal className="flex items-end justify-between gap-4">
-            <div><p className="text-xs font-bold uppercase tracking-[.2em] text-brand-600">Kabar Sekolah</p><h2 className="font-display mt-2 text-4xl font-bold text-brand-950">Berita terbaru</h2></div>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[.2em] text-brand-600">Kabar Sekolah</p>
+              <h2 className="font-display mt-2 text-4xl font-bold text-brand-950">Berita terbaru</h2>
+            </div>
             <Link to="/profil" className="text-sm font-semibold text-brand-700 hover:underline">Lihat informasi sekolah</Link>
           </Reveal>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {berita.length === 0
               ? [1, 2, 3].map((n) => (
                   <Reveal key={n} delay={(n - 1) * 0.06}>
-                    {/* [ISI DATA ASLI] slot berita — isi array `berita` di src/data/content.js */}
                     <div className="grid min-h-48 place-content-center rounded-lg border-2 border-dashed border-slate-300 bg-[#faf9f5] p-6 text-center">
                       <p className="text-sm font-bold uppercase tracking-wider text-slate-400">Slot berita {n} dari 3</p>
                       <p className="mt-2 text-xs leading-5 text-slate-400">
@@ -260,7 +279,9 @@ export default function Home() {
             </div>
           </div>
         </Reveal>
+
+        
       </section>
     </>
-  )
+  );
 }
