@@ -119,13 +119,21 @@ export default function Footer() {
         {/* Tautan Login Admin */}
         {/* Tautan Login Admin */}
             <a 
-  href="https://inception-j5z4.vercel.app/dashboard" 
+  href="https://inception-j5z4-k6vb7z1by-kaisar-dev.vercel.app/dashboard" 
   target="_blank" 
   rel="noopener noreferrer"
   className="text-slate-400 hover:text-slate-100 transition-colors flex items-center mt-2"
 >
   Login Admin
 </a>
+            {/* <a 
+  href="https://inception-j5z4.vercel.app/dashboard" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  className="text-slate-400 hover:text-slate-100 transition-colors flex items-center mt-2"
+>
+  Login Admin
+</a> */}
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-brand-100/55 sm:flex-row">
