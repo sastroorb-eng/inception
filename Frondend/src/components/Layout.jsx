@@ -3,6 +3,7 @@ import Navbar from './Navbar'
 import Footer from './Footer'
 import ScrollToTop from './ScrollToTop'
 import BackToTop from './BackToTop'
+import ChatPopup from './ChatPopup'
 
 export default function Layout({ children }) {
   const { pathname } = useLocation()
@@ -14,6 +15,8 @@ export default function Layout({ children }) {
       <main id="konten" className={`flex-1 ${pathname === '/' ? '' : 'page-shell'}`}>{children}</main>
       <Footer />
       <BackToTop />
+      {/* Popup TunasBot tidak dipasang di /chat agar tidak dobel dengan asisten layar penuh. */}
+      {pathname !== '/chat' && <ChatPopup />}
     </div>
   )
 }
