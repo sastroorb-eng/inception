@@ -120,7 +120,7 @@ export default function Footer() {
         {/* Tautan Login Admin */}
             <li>
               <a 
-                href="https://inception-web-preview.vercel.app/login" 
+                href="https://inception-j5z4.vercel.app/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-slate-400 hover:text-slate-100 transition-colors flex items-center mt-2"
