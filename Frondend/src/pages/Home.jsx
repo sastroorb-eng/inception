@@ -169,7 +169,7 @@ export default function Home() {
             {industryNetwork.map((partner, index) => (
               <Reveal key={partner.name} delay={index * 0.08}>
                 <div className="relative rounded-xl border border-white/15 bg-white/[.06] p-6 shadow-[0_8px_0_rgba(255,255,255,.08)] transition hover:-translate-y-1 hover:shadow-[0_12px_0_rgba(255,255,255,.1)]">
-                  <div className="flex items-center gap-5">
+                  <div className="flex flex-wrap items-center gap-5">
                     {partner.logo ? (
                       <img
                         src={partner.logo}
