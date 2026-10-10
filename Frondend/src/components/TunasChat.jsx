@@ -7,6 +7,7 @@ const KUNCI_CHAT = "chat_tunasbot";
 const buatId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
 export default function TunasBot() {
+  const [isRecording, setIsRecording] = useState(false);
   const [input, setInput] = useState("");
   const [chat, setChat] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -138,6 +139,40 @@ export default function TunasBot() {
 
   if (!isMounted) return null;
 
+  const startRecording = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Maaf, browser kamu tidak mendukung fitur rekam suara.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'id-ID'; // Bahasa Indonesia
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      // Ganti 'setInput' jika state kolom teksmu bernama lain
+      setInput((prev) => prev + (prev ? " " : "") + transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Error rekam suara:", event.error);
+      setIsRecording(false);
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognition.start();
+  };
+
   return (
     <div className="depth-card mx-auto flex h-[650px] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-line bg-card text-ink">
 
@@ -241,6 +276,23 @@ export default function TunasBot() {
           className="btn btn-primary"
         >
           Kirim
+
+          <button
+          type="button"
+          onClick={startRecording}
+          className={`p-2 rounded-full transition-all flex items-center justify-center ${
+            isRecording 
+              ? "bg-red-500 text-white animate-pulse" 
+              : "bg-slate-200 text-slate-600 hover:bg-slate-300"
+          }`}
+          title="Bicara ke TunasBot"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+          </svg>
+        </button>
         </button>
       </div>
 
