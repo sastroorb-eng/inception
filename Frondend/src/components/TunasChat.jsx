@@ -271,14 +271,6 @@ export default function TunasBot() {
           onKeyDown={handleKeyDown}
         />
 
-        type="button"
-          onClick={startRecording}
-          className={`p-2 rounded-full transition-all flex items-center justify-center ${
-            isRecording 
-              ? "bg-red-500 text-white animate-pulse" 
-              : "bg-slate-200 text-slate-600 hover:bg-slate-300"
-          }`}
-          title="Bicara ke TunasBot"
           
         <button
           onClick={() => kirimPesan(input)}
@@ -296,6 +288,15 @@ export default function TunasBot() {
             <line x1="12" y1="19" x2="12" y2="22"></line>
           </svg>
         </button>
+        
+          type="button"
+          onClick={startRecording}
+          className={`p-2 rounded-full transition-all flex items-center justify-center ${
+            isRecording 
+              ? "bg-red-500 text-white animate-pulse" 
+              : "bg-slate-200 text-slate-600 hover:bg-slate-300"
+          }`}
+          title="Bicara ke TunasBot"
         </button>
       </div>
 
