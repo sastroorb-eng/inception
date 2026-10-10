@@ -280,6 +280,14 @@ export default function TunasBot() {
           Kirim
 
           <button
+           type="button"
+          onClick={startRecording}
+          className={`p-2 rounded-full transition-all flex items-center justify-center ${
+            isRecording 
+              ? "bg-red-500 text-white animate-pulse" 
+              : "bg-slate-200 text-slate-600 hover:bg-slate-300"
+          }`}
+          title="Bicara ke TunasBot"
           
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -289,14 +297,7 @@ export default function TunasBot() {
           </svg>
         </button>
         
-          type="button"
-          onClick={startRecording}
-          className={`p-2 rounded-full transition-all flex items-center justify-center ${
-            isRecording 
-              ? "bg-red-500 text-white animate-pulse" 
-              : "bg-slate-200 text-slate-600 hover:bg-slate-300"
-          }`}
-          title="Bicara ke TunasBot"
+          
         </button>
       </div>
 
